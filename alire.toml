@@ -1,0 +1,12 @@
+name = "ravenscar_full_rp2040"
+description = "Ravenscar Full run-time for the STM32F407"
+version = "0.1.0"
+
+authors = ["AdaCore"]
+maintainers = ["Fabien Chouteau <fabien.chouteau@gmail.com>"]
+maintainers-logins = ["Fabien-Chouteau"]
+
+project-files = ["ravenscar_build.gpr"]
+
+[[depends-on]]
+gnat_arm_elf = "^11"
