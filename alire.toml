@@ -1,10 +1,10 @@
 name = "ravenscar_full_rp2040"
-description = "Ravenscar Full run-time for the STM32F407"
+description = "Ravenscar Full run-time for the RP2040"
 version = "0.1.0"
 
-authors = ["AdaCore"]
-maintainers = ["Fabien Chouteau <fabien.chouteau@gmail.com>"]
-maintainers-logins = ["Fabien-Chouteau"]
+authors = ["AdaCore", "Jeremy Grosser", "Fabien Chouteau", "Daniel King"]
+maintainers = ["Jeremy Grosser <jeremy@synack.me>"]
+maintainers-logins = ["JeremyGrosser"]
 
 project-files = ["ravenscar_build.gpr"]
 
