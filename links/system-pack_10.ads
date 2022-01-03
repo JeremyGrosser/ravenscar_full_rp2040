@@ -1,0 +1,1 @@
+../gnat/s-pack10.ads

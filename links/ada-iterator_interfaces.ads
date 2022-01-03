@@ -1,0 +1,1 @@
+../gnat/a-iteint.ads

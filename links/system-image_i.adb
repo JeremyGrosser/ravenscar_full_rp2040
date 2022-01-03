@@ -1,0 +1,1 @@
+../gnat/s-imagei.adb

@@ -1,0 +1,1 @@
+../gnat/s-arit64.ads

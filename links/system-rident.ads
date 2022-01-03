@@ -1,0 +1,1 @@
+../gnat/s-rident.ads

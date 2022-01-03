@@ -1,0 +1,1 @@
+../gnat/s-imfi32.ads

@@ -1,0 +1,1 @@
+../gnat/s-gcmain.adb

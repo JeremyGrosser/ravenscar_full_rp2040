@@ -1,0 +1,1 @@
+../gnat/i-rp2040-xosc.ads

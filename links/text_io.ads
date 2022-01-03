@@ -1,0 +1,1 @@
+../gnat/text_io.ads

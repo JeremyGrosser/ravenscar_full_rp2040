@@ -1,0 +1,1 @@
+../gnat/a-charac.ads

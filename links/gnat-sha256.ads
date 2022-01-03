@@ -1,0 +1,1 @@
+../gnat/g-sha256.ads

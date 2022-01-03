@@ -1,0 +1,1 @@
+../gnat/a-nucoty.ads

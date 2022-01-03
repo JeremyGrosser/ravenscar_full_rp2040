@@ -1,0 +1,1 @@
+../gnat/s-vade64.ads

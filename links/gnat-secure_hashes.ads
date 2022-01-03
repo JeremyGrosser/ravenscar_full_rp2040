@@ -1,0 +1,1 @@
+../gnat/g-sechas.ads

@@ -1,0 +1,1 @@
+../gnat/s-stposu.ads

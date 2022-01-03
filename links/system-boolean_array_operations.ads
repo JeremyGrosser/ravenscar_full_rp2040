@@ -1,0 +1,1 @@
+../gnat/s-boarop.ads

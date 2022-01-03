@@ -1,0 +1,1 @@
+../gnat/s-fode32.ads

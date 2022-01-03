@@ -1,0 +1,1 @@
+../gnat/i-cpoint.ads

@@ -1,0 +1,1 @@
+../gnat/s-sopco3.ads

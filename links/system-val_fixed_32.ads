@@ -1,0 +1,1 @@
+../gnat/s-vafi32.ads

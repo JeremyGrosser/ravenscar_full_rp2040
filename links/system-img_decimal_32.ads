@@ -1,0 +1,1 @@
+../gnat/s-imde32.ads

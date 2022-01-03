@@ -1,0 +1,1 @@
+../gnat/s-pack03.adb

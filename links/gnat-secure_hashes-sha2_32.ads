@@ -1,0 +1,1 @@
+../gnat/g-shsh32.ads

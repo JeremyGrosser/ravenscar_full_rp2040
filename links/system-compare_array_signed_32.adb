@@ -1,0 +1,1 @@
+../gnat/s-casi32.adb

@@ -1,0 +1,1 @@
+../gnat/a-stmaco.ads

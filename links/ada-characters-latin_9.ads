@@ -1,0 +1,1 @@
+../gnat/a-chlat9.ads

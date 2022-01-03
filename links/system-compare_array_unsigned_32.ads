@@ -1,0 +1,1 @@
+../gnat/s-caun32.ads

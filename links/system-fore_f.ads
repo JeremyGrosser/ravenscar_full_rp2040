@@ -1,0 +1,1 @@
+../gnat/s-fore_f.ads

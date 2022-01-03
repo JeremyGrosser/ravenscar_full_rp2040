@@ -1,0 +1,1 @@
+../gnat/s-pack24.ads

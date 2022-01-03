@@ -1,0 +1,1 @@
+../gnat/s-sopco5.adb

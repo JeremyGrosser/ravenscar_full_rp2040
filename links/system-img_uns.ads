@@ -1,0 +1,1 @@
+../gnat/s-imguns.ads

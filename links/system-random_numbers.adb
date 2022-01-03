@@ -1,0 +1,1 @@
+../gnat/s-rannum.adb
