@@ -124,7 +124,6 @@ _start_rom:
 	bne	0b
 
 1:
-	bl __gnat_initialize_bootrom
 	bl	_ada_setup_clocks
 	bl	main
 	bl	_exit
