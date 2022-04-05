@@ -8,7 +8,7 @@
 --                                                                          --
 --        Copyright (C) 1999-2002 Universidad Politecnica de Madrid         --
 --             Copyright (C) 2003-2004 The European Space Agency            --
---            Copyright (C) 2005-2021, Free Software Foundation, Inc.       --
+--            Copyright (C) 2005-2019, Free Software Foundation, Inc.       --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -98,18 +98,9 @@ package body System.BB.CPU_Primitives.Context_Switch_Trigger is
 
       Asm
         (Template =>
-         --  Determine which CPU we're running on so that we read the
-         --  correct entry from the thread tables based on the current CPU.
-         --  CPUID = 0 on core0
-         --  CPUID = 1 on core1
-
-         "ldr r0, =0xD0000000" & NL & --  Load address of CPUID register.
-         "ldr r0, [r0]" & NL & --  Read CPUID register into r0
-         "lsl r0, #2" & NL &   --  multiply by 4
-
          "ldr r2,=__gnat_running_thread_table" & NL &
          "mrs  r12, PSP "     & NL & -- Retrieve current PSP
-         "ldr  r3, [r2, r0]"  & NL & -- Load address of running context buffer
+         "ldr  r3, [r2]"      & NL & -- Load address of running context buffer
 
          --  If floating point is enabled, we may have to save the non-volatile
          --  floating point registers, and save bit 4 of the LR register, as
@@ -139,9 +130,9 @@ package body System.BB.CPU_Primitives.Context_Switch_Trigger is
          else
               "stm  r3, {r4-r12}"     & NL) & -- Save context
 
-         "ldr  r3, =first_thread_table" & NL &
-         "ldr  r3, [r3, r0]" & NL & -- Load address of new context
-         "str  r3, [r2, r0]" & NL & -- Update __gnat_running_thread_table
+         "ldr  r3,=first_thread_table" & NL &
+         "ldr  r3, [r3]"  & NL & -- Load address of new context
+         "str  r3, [r2]"  & NL & -- Update value of __gnat_running_thread_table
 
          --  Load R4-R11 and PSP (stored in R12) from the new context buffer
          (if Is_ARMv6m then

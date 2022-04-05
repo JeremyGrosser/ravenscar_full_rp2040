@@ -41,7 +41,7 @@ package System.BB.MCU_Parameters is
    pragma No_Elaboration_Code_All;
    pragma Preelaborate;
 
-   Number_Of_Interrupts : constant := 64;
+   Number_Of_Interrupts : constant := 32;
    --  64 logical interrupts are available.
    --
    --  Interrupts 0 .. 31 are mapped to IRQs 0 .. 31 on core0.
