@@ -6,7 +6,7 @@
 abstract project Target_Options is
 
   type Build_Type is ("Production", "Debug", "Assert", "Gnatcov");
-  Build : Build_Type := external ("BUILD", "Production");
+  Build : Build_Type := external ("BUILD", "Debug");
 
   --  COMFLAGS here is common flags (used for C and Ada).
   COMFLAGS := ("-fcallgraph-info=su,da",
