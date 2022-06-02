@@ -124,6 +124,7 @@ _start_rom:
 	bne	0b
 
 1:
+	bl __gnat_initialize_bootrom
 	bl	_ada_setup_clocks
 	bl	main
 	bl	_exit
@@ -172,6 +173,12 @@ __gnat_pend_sv_trap:
 __gnat_sys_tick_trap:
 0:	b 0b
 	.size __gnat_sys_tick_trap, . - __gnat_sys_tick_trap
+
+.weak __gnat_initialize_bootrom
+.type __gnat_initialize_bootrom, %function
+__gnat_initialize_bootrom:
+0:	b 0b
+	.size __gnat_initialize_bootrom, . - __gnat_initialize_bootrom
 
 	.thumb_func
 fault:	b fault
