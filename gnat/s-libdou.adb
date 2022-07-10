@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 B o d y                                  --
 --                                                                          --
---           Copyright (C) 2014-2020, Free Software Foundation, Inc.        --
+--           Copyright (C) 2014-2022, Free Software Foundation, Inc.        --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -60,7 +60,7 @@ package body System.Libm_Double is
    --  A1 (i) = Float (2**((1-i)/16))
 
    A1_Tab_LF : constant Long_Float_Table :=
-                 (1.0,
+                 [1.0,
                   Long_Float'Machine (Root16_Half),
                   Long_Float'Machine (Root16_Half**2),
                   Long_Float'Machine (Root16_Half**3),
@@ -76,19 +76,19 @@ package body System.Libm_Double is
                   Long_Float'Machine (Root16_Half**13),
                   Long_Float'Machine (Root16_Half**14),
                   Long_Float'Machine (Root16_Half**15),
-                  0.5);
+                  0.5];
 
    --  A2 (i) = 2**((1-2i)/16) - A1(2i)
 
    A2_Tab_LF : constant Long_Float_Table :=
-                 (Root16_Half - Long_Float'Machine (Root16_Half),
+                 [Root16_Half - Long_Float'Machine (Root16_Half),
                   Root16_Half**3  - Long_Float'Machine (Root16_Half**3),
                   Root16_Half**5  - Long_Float'Machine (Root16_Half**5),
                   Root16_Half**7  - Long_Float'Machine (Root16_Half**7),
                   Root16_Half**9  - Long_Float'Machine (Root16_Half**9),
                   Root16_Half**11 - Long_Float'Machine (Root16_Half**11),
                   Root16_Half**13 - Long_Float'Machine (Root16_Half**13),
-                  Root16_Half**15 - Long_Float'Machine (Root16_Half**15));
+                  Root16_Half**15 - Long_Float'Machine (Root16_Half**15)];
 
    --  Intermediary functions
 

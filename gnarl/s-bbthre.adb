@@ -8,7 +8,7 @@
 --                                                                          --
 --        Copyright (C) 1999-2002 Universidad Politecnica de Madrid         --
 --             Copyright (C) 2003-2005 The European Space Agency            --
---                     Copyright (C) 2003-2020, AdaCore                     --
+--                     Copyright (C) 2003-2022, AdaCore                     --
 --                                                                          --
 -- GNARL is free software; you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -59,6 +59,7 @@ package body System.BB.Threads is
       This_CPU      : System.Multiprocessors.CPU_Range;
       Stack_Top     : System.Address;
       Stack_Bottom  : System.Address);
+   --  Intialize the thread's kernel data structure and its context
 
    -----------------------
    -- Stack information --
@@ -125,9 +126,9 @@ package body System.BB.Threads is
       return Id.Active_Priority;
    end Get_Priority;
 
-   -----------------------------
+   -----------------------
    -- Initialize_Thread --
-   -----------------------------
+   -----------------------
 
    procedure Initialize_Thread
      (Id            : Thread_Id;
@@ -138,9 +139,7 @@ package body System.BB.Threads is
       Stack_Top     : System.Address;
       Stack_Bottom  : System.Address) is
    begin
-      --  The environment thread executes the main procedure of the program
-
-      --  CPU of the environment thread is current one (initialization CPU)
+      --  Initialize task kernel data structure
 
       Id.Base_CPU := This_CPU;
 
@@ -149,8 +148,7 @@ package body System.BB.Threads is
       Id.Base_Priority   := Priority;
       Id.Active_Priority := Priority;
 
-      --  Insert in the global list
-      --  ??? Not thread safe.
+      --  Insert in the global list.
 
       Id.Global_List := Queues.Global_List;
       Queues.Global_List := Id;
@@ -186,10 +184,7 @@ package body System.BB.Threads is
       Id.Execution_Time :=
         System.BB.Time.Initial_Composite_Execution_Time;
 
-      --  Initialize the saved registers. We can ignore the stack and code to
-      --  execute because the environment task is already executing. We are
-      --  interested in the initialization of the rest of the state, such as
-      --  the interrupt nesting level and the cache state.
+      --  Initialize the task's register context
 
       Initialize_Context
         (Buffer          => Id.Context'Access,

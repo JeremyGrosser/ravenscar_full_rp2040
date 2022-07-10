@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 B o d y                                  --
 --                                                                          --
---         Copyright (C) 2014-2020, Free Software Foundation, Inc.          --
+--         Copyright (C) 2014-2022, Free Software Foundation, Inc.          --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -121,8 +121,8 @@ package body System.Libm is
                Q1 : constant T := Exact (-5.5484_6723);
 
             begin
-               P := Compute_Horner ((P1, P2), X);
-               Q := Compute_Horner ((Q0, Q1 + X), X);
+               P := Compute_Horner ([P1, P2], X);
+               Q := Compute_Horner ([Q0, Q1 + X], X);
             end;
 
          else
@@ -142,8 +142,8 @@ package body System.Libm is
                Q4 : constant T := Exact (-0.23823_85915_36702_38830E+2);
 
             begin
-               P := Compute_Horner ((P1, P2, P3, P4, P5), X);
-               Q := Compute_Horner ((Q0, Q1, Q2, Q3, Q4 + X), X);
+               P := Compute_Horner ([P1, P2, P3, P4, P5], X);
+               Q := Compute_Horner ([Q0, Q1, Q2, Q3, Q4 + X], X);
             end;
          end if;
 
@@ -169,7 +169,7 @@ package body System.Libm is
                Q0 : constant T := Exact (0.14125_00740E1);
 
             begin
-               P := Compute_Horner ((P0, P1), G);
+               P := Compute_Horner ([P0, P1], G);
                Q := Q0 + G;
             end;
 
@@ -188,8 +188,8 @@ package body System.Libm is
                Q3 : constant T := Exact (0.15024_00116_00285_76121E2);
 
             begin
-               P := Compute_Horner ((P0, P1, P2, P3), G);
-               Q := Compute_Horner ((Q0, Q1, Q2, Q3 + G), G);
+               P := Compute_Horner ([P0, P1, P2, P3], G);
+               Q := Compute_Horner ([Q0, Q1, Q2, Q3 + G], G);
             end;
          end if;
 
@@ -207,30 +207,30 @@ package body System.Libm is
                       --  Hart's constants : #COS 3821# (p. 209)
                       --  Approximation MRE = 8.1948E-9 ???
 
-                      (0 => Exact (0.99999_99999),
+                      [0 => Exact (0.99999_99999),
                        1 => Exact (-0.49999_99957),
                        2 => Exact (0.41666_61323E-1),
                        3 => Exact (-0.13888_52915E-2),
-                       4 => Exact (0.24372_67909E-4))
+                       4 => Exact (0.24372_67909E-4)]
 
                     elsif Mantissa <= 53
                     then
                       --  Hart's constants : #COS 3824# (p. 209)
                       --  Approximation MRE = 1.2548E-18
 
-                      (0 => Exact (0.99999_99999_99999_99995),
+                      [0 => Exact (0.99999_99999_99999_99995),
                        1 => Exact (-0.49999_99999_99999_99279),
                        2 => Exact (+0.04166_66666_66666_430254),
                        3 => Exact (-0.13888_88888_88589_60433E-2),
                        4 => Exact (+0.24801_58728_28994_63022E-4),
                        5 => Exact (-0.27557_31286_56960_82219E-6),
                        6 => Exact (+0.20875_55514_56778_82872E-8),
-                       7 => Exact (-0.11352_12320_57839_39582E-10))
+                       7 => Exact (-0.11352_12320_57839_39582E-10)]
                     else
                       --  Hart's constants : #COS 3825# (p. 209-210)
                       --  Approximation MRE = ???
 
-                      (0 => Exact (+1.0),
+                      [0 => Exact (+1.0),
                        1 => Exact (-0.49999_99999_99999_99994_57899),
                        2 => Exact (+0.41666_66666_66666_66467_89627E-1),
                        3 => Exact (-0.13888_88888_88888_57508_03579E-2),
@@ -238,7 +238,7 @@ package body System.Libm is
                        5 => Exact (-0.27557_31921_21557_14660_22522E-6),
                        6 => Exact (+0.20876_75377_75228_35357_18906E-8),
                        7 => Exact (-0.11470_23678_56189_18819_10735E-10),
-                       8 => Exact (+0.47358_93914_72413_21156_01793E-13)));
+                       8 => Exact (+0.47358_93914_72413_21156_01793E-13)]);
       begin
          return Compute_Horner (Cos_P, X * X);
       end Approx_Cos;
@@ -252,33 +252,33 @@ package body System.Libm is
          Exp_P : constant Polynomial :=
                    (if Mantissa <= 24
                     then --  Approximation MRE = 8.1529E-10
-                      (0 => Exact (0.24999_99995_0),
-                       1 => Exact (0.41602_88626_0E-2))
+                      [0 => Exact (0.24999_99995_0),
+                       1 => Exact (0.41602_88626_0E-2)]
                     elsif Mantissa <= 53
                     then --  Approximation MRE = 1.0259E-17
-                      (0 => Exact (0.24999_99999_99999_993),
+                      [0 => Exact (0.24999_99999_99999_993),
                        1 => Exact (0.69436_00015_11792_852E-2),
-                       2 => Exact (0.16520_33002_68279_130E-4))
+                       2 => Exact (0.16520_33002_68279_130E-4)]
                     else
-                      (0 => Exact (0.25),
+                      [0 => Exact (0.25),
                        1 => Exact (0.75753_18015_94227_76666E-2),
-                       2 => Exact (0.31555_19276_56846_46356E-4)));
+                       2 => Exact (0.31555_19276_56846_46356E-4)]);
 
          Exp_Q : constant Polynomial :=
                    (if Mantissa <= 24
                     then
-                      (0 => Exact (0.5),
-                       1 => Exact (0.49987_17877_8E-1))
+                      [0 => Exact (0.5),
+                       1 => Exact (0.49987_17877_8E-1)]
                     elsif Mantissa <= 53
                     then
-                      (0 => Exact (0.5),
+                      [0 => Exact (0.5),
                        1 => Exact (0.55553_86669_69001_188E-1),
-                       2 => Exact (0.49586_28849_05441_294E-3))
+                       2 => Exact (0.49586_28849_05441_294E-3)]
                     else
-                      (0 => Exact (0.5),
+                      [0 => Exact (0.5),
                        1 => Exact (0.56817_30269_85512_21787E-1),
                        2 => Exact (0.63121_89437_43985_03557E-3),
-                       3 => Exact (0.75104_02839_98700_46114E-6)));
+                       3 => Exact (0.75104_02839_98700_46114E-6)]);
 
          G  : constant T := X * X;
          P  : T;
@@ -301,23 +301,23 @@ package body System.Libm is
          Log_P : constant Polynomial :=
                    (if Mantissa <= 24
                     then --  Approximation MRE = 1.0368E-10
-                      (0 => Exact (-0.46490_62303_464),
-                       1 => Exact (0.013600_95468_621))
+                      [0 => Exact (-0.46490_62303_464),
+                       1 => Exact (0.013600_95468_621)]
                     else --  Approximation MRE = 4.7849E-19
-                      (0 => Exact (-0.64124_94342_37455_81147E+2),
+                      [0 => Exact (-0.64124_94342_37455_81147E+2),
                        1 => Exact (0.16383_94356_30215_34222E+2),
-                       2 => Exact (-0.78956_11288_74912_57267)));
+                       2 => Exact (-0.78956_11288_74912_57267)]);
 
          Log_Q : constant Polynomial :=
                    (if Mantissa <= 24
                     then
-                      (0 => Exact (-5.5788_73750_242),
-                       1 => Exact (1.0))
+                      [0 => Exact (-5.5788_73750_242),
+                       1 => Exact (1.0)]
                     else
-                      (0 => Exact (-0.76949_93210_84948_79777E+3),
+                      [0 => Exact (-0.76949_93210_84948_79777E+3),
                        1 => Exact (0.31203_22209_19245_32844E+3),
                        2 => Exact (-0.35667_97773_90346_46171E+2),
-                       3 => Exact (1.0)));
+                       3 => Exact (1.0)]);
 
          G  : T;
          P  : T;
@@ -343,12 +343,12 @@ package body System.Libm is
          Power_Log_P  : constant Polynomial :=
                           (if Mantissa <= 24
                            then --  Approximation MRE = 7.9529E-4
-                             (1 => Exact (0.83357_541E-1))
+                             [1 => Exact (0.83357_541E-1)]
                            else --  Approximation MRE = 8.7973E-8
-                             (1 => Exact (0.83333_33333_33332_11405E-1),
+                             [1 => Exact (0.83333_33333_33332_11405E-1),
                               2 => Exact (0.12500_00000_05037_99174E-1),
                               3 => Exact (0.22321_42128_59242_58967E-2),
-                              4 => Exact (0.43445_77567_21631_19635E-3)));
+                              4 => Exact (0.43445_77567_21631_19635E-3)]);
 
          K : constant T := Exact (0.44269_50408_88963_40736);
          G : constant T := X * X;
@@ -370,17 +370,17 @@ package body System.Libm is
          Exp2_P : constant Polynomial :=
                     (if Mantissa > 24
                      then --  Approximation MRE = 1.7418E-17
-                       (1 => Exact (0.69314_71805_59945_29629),
+                       [1 => Exact (0.69314_71805_59945_29629),
                         2 => Exact (0.24022_65069_59095_37056),
                         3 => Exact (0.55504_10866_40855_95326E-1),
                         4 => Exact (0.96181_29059_51724_16964E-2),
                         5 => Exact (0.13333_54131_35857_84703E-2),
                         6 => Exact (0.15400_29044_09897_64601E-3),
-                        7 => Exact (0.14928_85268_05956_08186E-4))
+                        7 => Exact (0.14928_85268_05956_08186E-4)]
                      else --  Approximation MRE = 3.3642E-9
-                       (1 => Exact (0.69314_675),
+                       [1 => Exact (0.69314_675),
                         2 => Exact (0.24018_510),
-                        3 => Exact (0.54360_383E-1)));
+                        3 => Exact (0.54360_383E-1)]);
       begin
          return Exact (1.0) + Compute_Horner (Exp2_P, X) * X;
       end Approx_Exp2;
@@ -399,20 +399,20 @@ package body System.Libm is
                      then
                        --  Hart's constants: #SIN 3040# (p. 199)
 
-                       (1 => Exact (-0.16666_65022),
+                       [1 => Exact (-0.16666_65022),
                         2 => Exact (0.83320_16396E-2),
-                        3 => Exact (-0.19501_81843E-3))
+                        3 => Exact (-0.19501_81843E-3)]
                      else
                        --  Hart's constants: #SIN 3044# (p. 199)
                        --  Approximation MRE = 2.4262E-18 ???
 
-                       (1 => Exact (-0.16666_66666_66666_66628),
+                       [1 => Exact (-0.16666_66666_66666_66628),
                         2 => Exact (0.83333_33333_33332_03335E-2),
                         3 => Exact (-0.19841_26984_12531_05860E-3),
                         4 => Exact (0.27557_31921_33901_68712E-5),
                         5 => Exact (-0.25052_10473_82673_30950E-7),
                         6 => Exact (0.16058_34762_32246_06553E-9),
-                        7 => Exact (-0.75778_67884_01271_15607E-12)));
+                        7 => Exact (-0.75778_67884_01271_15607E-12)]);
 
          Sqrt_Epsilon_LLF : constant Long_Long_Float :=
                        Sqrt_2 ** (1 - Long_Long_Float'Machine_Mantissa);
@@ -435,24 +435,24 @@ package body System.Libm is
          Sinh_P : constant Polynomial :=
                     (if Mantissa <= 24
                      then --  Approximation MRE = 2.6841E-8
-                       (0 => Exact (-0.71379_3159E1),
-                        1 => Exact (-0.19033_3300))
+                       [0 => Exact (-0.71379_3159E1),
+                        1 => Exact (-0.19033_3300)]
                      else --  Approximation MRE = 4.6429E-18
-                       (0 => Exact (-0.35181_28343_01771_17881E6),
+                       [0 => Exact (-0.35181_28343_01771_17881E6),
                         1 => Exact (-0.11563_52119_68517_68270E5),
                         2 => Exact (-0.16375_79820_26307_51372E3),
-                        3 => Exact (-0.78966_12741_73570_99479)));
+                        3 => Exact (-0.78966_12741_73570_99479)]);
 
          Sinh_Q : constant Polynomial :=
                     (if Mantissa <= 24
                      then
-                       (0 => Exact (-0.42827_7109E2),
-                        1 => Exact (1.0))
+                       [0 => Exact (-0.42827_7109E2),
+                        1 => Exact (1.0)]
                      else
-                       (0 => Exact (-0.21108_77005_81062_71242E7),
+                       [0 => Exact (-0.21108_77005_81062_71242E7),
                         1 => Exact (0.36162_72310_94218_36460E5),
                         2 => Exact (-0.27773_52311_96507_01667E3),
-                        3 => Exact (1.0)));
+                        3 => Exact (1.0)]);
 
          G : constant T := X * X;
          P : T;
@@ -473,24 +473,24 @@ package body System.Libm is
          Tan_P  : constant Polynomial :=
                     (if Mantissa <= 24
                      then --  Approximation MRE = 2.7824E-8
-                       (1 => Exact (-0.95801_7723E-1))
+                       [1 => Exact (-0.95801_7723E-1)]
                      else --  Approximation MRE = 3.5167E-18
-                       (1 => Exact (-0.13338_35000_64219_60681),
+                       [1 => Exact (-0.13338_35000_64219_60681),
                         2 => Exact (0.34248_87823_58905_89960E-2),
-                        3 => Exact (-0.17861_70734_22544_26711E-4)));
+                        3 => Exact (-0.17861_70734_22544_26711E-4)]);
 
          Tan_Q  : constant Polynomial :=
                     (if Mantissa <= 24
                      then
-                       (0 => Exact (1.0),
+                       [0 => Exact (1.0),
                         1 => Exact (-0.42913_5777),
-                        2 => Exact (0.97168_5835E-2))
+                        2 => Exact (0.97168_5835E-2)]
                      else
-                       (0 => Exact (1.0),
+                       [0 => Exact (1.0),
                         1 => Exact (-0.46671_68333_97552_94240),
                         2 => Exact (0.25663_83228_94401_12864E-1),
                         3 => Exact (-0.31181_53190_70100_27307E-3),
-                        4 => Exact (0.49819_43399_37865_12270E-6)));
+                        4 => Exact (0.49819_43399_37865_12270E-6)]);
 
          G : constant T := X * X;
          P : constant T := Multiply_Add (X, G * Compute_Horner (Tan_P, G), X);
@@ -508,24 +508,24 @@ package body System.Libm is
          Tan_P  : constant Polynomial :=
                     (if Mantissa <= 24
                      then --  Approxmiation MRE = 1.5113E-17
-                       (1 => Exact (-0.95801_7723E-1))
+                       [1 => Exact (-0.95801_7723E-1)]
                      else
-                       (1 => Exact (-0.13338_35000_64219_60681),
+                       [1 => Exact (-0.13338_35000_64219_60681),
                         2 => Exact (0.34248_87823_58905_89960E-2),
-                        3 => Exact (-0.17861_70734_22544_26711E-4)));
+                        3 => Exact (-0.17861_70734_22544_26711E-4)]);
 
          Tan_Q  : constant Polynomial :=
                     (if Mantissa <= 24
                      then
-                       (0 => Exact (1.0),
+                       [0 => Exact (1.0),
                         1 => Exact (-0.42913_5777),
-                        2 => Exact (0.97168_5835E-2))
+                        2 => Exact (0.97168_5835E-2)]
                      else
-                       (0 => Exact (1.0),
+                       [0 => Exact (1.0),
                         1 => Exact (-0.46671_68333_97552_94240),
                         2 => Exact (0.25663_83228_94401_12864E-1),
                         3 => Exact (-0.31181_53190_70100_27307E-3),
-                        4 => Exact (0.49819_43399_37865_12270E-6)));
+                        4 => Exact (0.49819_43399_37865_12270E-6)]);
          G : constant T := X * X;
          P : constant T := Multiply_Add (X, G * Compute_Horner (Tan_P, G), X);
          Q : constant T := Compute_Horner (Tan_Q, G);
@@ -542,23 +542,23 @@ package body System.Libm is
          Tanh_P : constant Polynomial :=
                     (if Mantissa <= 24
                      then --  Approximation MRE = 2.7166E-9
-                       (0 => Exact (-0.82377_28127),
-                        1 => Exact (-0.38310_10665E-2))
+                       [0 => Exact (-0.82377_28127),
+                        1 => Exact (-0.38310_10665E-2)]
                      else --  Approximation MRE = 3.2436E-18
-                       (0 => Exact (-0.16134_11902_39962_28053E4),
+                       [0 => Exact (-0.16134_11902_39962_28053E4),
                         1 => Exact (-0.99225_92967_22360_83313E2),
-                        2 => Exact (-0.96437_49277_72254_69787)));
+                        2 => Exact (-0.96437_49277_72254_69787)]);
 
          Tanh_Q : constant Polynomial :=
                     (if Mantissa <= 24
                      then
-                       (0 => Exact (2.4713_19654),
-                        1 => Exact (1.0))
+                       [0 => Exact (2.4713_19654),
+                        1 => Exact (1.0)]
                      else
-                       (0 => Exact (0.48402_35707_19886_88686E4),
+                       [0 => Exact (0.48402_35707_19886_88686E4),
                         1 => Exact (0.22337_72071_89623_12926E4),
                         2 => Exact (0.11274_47438_05349_49335E3),
-                        3 => Exact (1.0)));
+                        3 => Exact (1.0)]);
 
          G    : constant T := X * X;
          P, Q : T;

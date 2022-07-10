@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 S p e c                                  --
 --                                                                          --
---          Copyright (C) 2005-2020, Free Software Foundation, Inc.         --
+--          Copyright (C) 2005-2022, Free Software Foundation, Inc.         --
 --                                                                          --
 -- This specification is derived from the Ada Reference Manual for use with --
 -- GNAT. The copyright notice above, and the license provisions that follow --
@@ -32,9 +32,11 @@ package Ada.Task_Termination is
 
    type Termination_Handler is access
      protected procedure (T : Ada.Task_Identification.Task_Id);
-   --  ??? This type is not conformant with the RM, as cause and exception
-   --  occurrence are missing. Adding cause would be easy, but in the sfp
-   --  profile there is no declaration of Exception_Occurrence.
+   --  This type is not conformant with the RM because it is missing
+   --  the exception occurrence and cause parameter. The former is
+   --  missing because the package is used for runtimes that do not
+   --  support Exception_Occurrence, while the latter is not included
+   --  since tasks can only terminate normally.
 
    procedure Set_Dependents_Fallback_Handler
      (Handler : Termination_Handler);

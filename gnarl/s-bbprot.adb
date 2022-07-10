@@ -8,7 +8,7 @@
 --                                                                          --
 --        Copyright (C) 1999-2002 Universidad Politecnica de Madrid         --
 --             Copyright (C) 2003-2005 The European Space Agency            --
---                     Copyright (C) 2003-2020, AdaCore                     --
+--                     Copyright (C) 2003-2022, AdaCore                     --
 --                                                                          --
 -- GNARL is free software; you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -39,19 +39,8 @@ pragma Restrictions (No_Elaboration_Code);
 with System.BB.CPU_Primitives;
 with System.BB.Parameters;
 with System.BB.Threads;
-with System.BB.Time;
-
 with System.BB.Threads.Queues;
-
---  The following pragma Elaborate is anomalous. We generally do not like
---  to use pragma Elaborate, since it disconnects the static elaboration
---  model checking (and generates a warning when using this model). So
---  either replace with Elaborate_All, or document why we need this and
---  why it is safe ???
-
-pragma Warnings (Off);
-pragma Elaborate (System.BB.Threads.Queues);
-pragma Warnings (On);
+with System.BB.Time;
 
 package body System.BB.Protection is
 

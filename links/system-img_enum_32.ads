@@ -1,0 +1,1 @@
+../gnat/s-imen32.ads

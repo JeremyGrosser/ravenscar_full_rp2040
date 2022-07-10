@@ -6,7 +6,7 @@
 --                                                                          --
 --                                  B o d y                                 --
 --                                                                          --
---                     Copyright (C) 2001-2020, AdaCore                     --
+--                     Copyright (C) 2001-2022, AdaCore                     --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -47,10 +47,6 @@ package body System.Interrupts is
 
       PO_Priority : Interrupt_Priority;
       --  The priority of the protected object in which the handler is declared
-      --
-      --  As the handler is a fat pointer to both the subprogram and the
-      --  protected object, it could be possible to extract the priority
-      --  from the access. But there is currently no mechanism for that ???
    end record;
    pragma Suppress_Initialization (Handler_Entry);
 
@@ -144,7 +140,7 @@ package body System.Interrupts is
    ---------------------------------
 
    procedure Install_Restricted_Handlers
-     (Prio     : Any_Priority;
+     (Prio     : Interrupt_Priority;
       Handlers : Handler_Array)
    is
       use System.Tasking.Restricted.Stages;

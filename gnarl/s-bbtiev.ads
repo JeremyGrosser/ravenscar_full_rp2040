@@ -6,7 +6,7 @@
 --                                                                          --
 --                                  S p e c                                 --
 --                                                                          --
---                     Copyright (C) 2011-2020, AdaCore                     --
+--                     Copyright (C) 2011-2022, AdaCore                     --
 --                                                                          --
 -- GNARL is free software; you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -32,14 +32,12 @@ with System.Multiprocessors;
 package System.Bb.Timing_Events is
    pragma Preelaborate;
 
-   type Timing_Event;
+   type Timing_Event is tagged limited private;
 
    type Timing_Event_Handler
      is access procedure (Event : in out Timing_Event'Class);
 
    type Timing_Event_Access is access all Timing_Event;
-
-   type Timing_Event is tagged limited private;
 
    procedure Set_Handler
      (Event   : in out Timing_Event;

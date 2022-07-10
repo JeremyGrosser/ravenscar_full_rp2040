@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 B o d y                                  --
 --                                                                          --
---         Copyright (C) 2014-2020, Free Software Foundation, Inc.          --
+--         Copyright (C) 2014-2022, Free Software Foundation, Inc.          --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -57,7 +57,7 @@ package body System.Libm_Single is
    --  A1 (i) = Float (2**((1-i)/16))
 
    A1_Tab_F : constant Float_Table :=
-                (1.0,
+                [1.0,
                  Root16_Half,
                  Root16_Half**2,
                  Root16_Half**3,
@@ -73,19 +73,19 @@ package body System.Libm_Single is
                  Root16_Half**13,
                  Root16_Half**14,
                  Root16_Half**15,
-                 0.5);
+                 0.5];
 
    --  A2 (i) = 2**((1-2i)/16) - A1(2i)
 
    A2_Tab_F : constant Float_Table :=
-                (Root16_Half     - Float'Machine (Root16_Half),
+                [Root16_Half     - Float'Machine (Root16_Half),
                  Root16_Half**3  - Float'Machine (Root16_Half**3),
                  Root16_Half**5  - Float'Machine (Root16_Half**5),
                  Root16_Half**7  - Float'Machine (Root16_Half**7),
                  Root16_Half**9  - Float'Machine (Root16_Half**9),
                  Root16_Half**11 - Float'Machine (Root16_Half**11),
                  Root16_Half**13 - Float'Machine (Root16_Half**13),
-                 Root16_Half**15 - Float'Machine (Root16_Half**15));
+                 Root16_Half**15 - Float'Machine (Root16_Half**15)];
 
    Sqrt_Epsilon_F : constant Float :=
                       Sqrt_2 ** (1 - Float'Machine_Mantissa);
@@ -717,7 +717,7 @@ package body System.Libm_Single is
             I := 1;
          end if;
 
-         MM := Integer (IW1  / 16) + I;
+         MM := Integer (IW1 / 16) + I;
          PP := 16 * MM - IW1;
 
          Z := Approx_Exp2 (W2);

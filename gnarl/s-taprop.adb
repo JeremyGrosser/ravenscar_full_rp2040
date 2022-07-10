@@ -6,7 +6,7 @@
 --                                                                          --
 --                                  B o d y                                 --
 --                                                                          --
---                     Copyright (C) 2001-2020, AdaCore                     --
+--                     Copyright (C) 2001-2022, AdaCore                     --
 --                                                                          --
 -- GNARL is free software; you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -374,7 +374,6 @@ package body System.Task_Primitives.Operations is
          Idle_Task : Tasking.Ada_Task_Control_Block renames
                         Idle_Tasks (CPU'First);
          Success : Boolean;
-         pragma Unreferenced (Success);
 
       begin
          Initialize_Idle (CPU'First);

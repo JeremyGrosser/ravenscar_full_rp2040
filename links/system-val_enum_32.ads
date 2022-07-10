@@ -1,0 +1,1 @@
+../gnat/s-vaen32.ads

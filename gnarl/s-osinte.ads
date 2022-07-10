@@ -7,7 +7,7 @@
 --                                   S p e c                                --
 --                                                                          --
 --             Copyright (C) 1991-1994, Florida State University            --
---          Copyright (C) 1995-2020, Free Software Foundation, Inc.         --
+--          Copyright (C) 1995-2022, Free Software Foundation, Inc.         --
 --                                                                          --
 -- GNARL is free software; you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -36,7 +36,8 @@
 --  needed by the tasking run-time (libgnarl).
 
 pragma Restrictions (No_Elaboration_Code);
---  This could use a comment, why is it here???
+--  The kernel initialization routine needs to execute before elaboration.
+--  Consequently, packages used by this code cannot require elaboration.
 
 with System.Multiprocessors;
 with System.Storage_Elements;

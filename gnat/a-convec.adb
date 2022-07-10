@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 B o d y                                  --
 --                                                                          --
---          Copyright (C) 2004-2020, Free Software Foundation, Inc.         --
+--          Copyright (C) 2004-2022, Free Software Foundation, Inc.         --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -64,8 +64,8 @@ is
    begin
       return Result : Vector do
          Reserve_Capacity (Result, Length (Left) + Length (Right));
-         Append (Result, Left);
-         Append (Result, Right);
+         Append_Vector (Result, Left);
+         Append_Vector (Result, Right);
       end return;
    end "&";
 
@@ -73,7 +73,7 @@ is
    begin
       return Result : Vector do
          Reserve_Capacity (Result, Length (Left) + 1);
-         Append (Result, Left);
+         Append_Vector (Result, Left);
          Append (Result, Right);
       end return;
    end "&";
@@ -83,7 +83,7 @@ is
       return Result : Vector do
          Reserve_Capacity (Result, 1 + Length (Right));
          Append (Result, Left);
-         Append (Result, Right);
+         Append_Vector (Result, Right);
       end return;
    end "&";
 
@@ -167,21 +167,10 @@ is
    -- Append --
    ------------
 
-   procedure Append (Container : in out Vector; New_Item : Vector) is
-   begin
-      if Is_Empty (New_Item) then
-         return;
-      elsif Checks and then Container.Last = Index_Type'Last then
-         raise Constraint_Error with "vector is already at its maximum length";
-      else
-         Insert (Container, Container.Last + 1, New_Item);
-      end if;
-   end Append;
-
    procedure Append
      (Container : in out Vector;
       New_Item  : Element_Type;
-      Count     : Count_Type := 1)
+      Count     : Count_Type)
    is
    begin
       --  In the general case, we pass the buck to Insert, but for efficiency,
@@ -210,16 +199,31 @@ is
       end if;
    end Append;
 
-   ----------------
-   -- Append_One --
-   ----------------
+   -------------------
+   -- Append_Vector --
+   -------------------
 
-   procedure Append_One (Container : in out Vector;
-                         New_Item  :        Element_Type)
+   procedure Append_Vector (Container : in out Vector; New_Item : Vector) is
+   begin
+      if Is_Empty (New_Item) then
+         return;
+      elsif Checks and then Container.Last = Index_Type'Last then
+         raise Constraint_Error with "vector is already at its maximum length";
+      else
+         Insert_Vector (Container, Container.Last + 1, New_Item);
+      end if;
+   end Append_Vector;
+
+   ------------
+   -- Append --
+   ------------
+
+   procedure Append (Container : in out Vector;
+                     New_Item  :        Element_Type)
    is
    begin
       Insert (Container, Last_Index (Container) + 1, New_Item, 1);
-   end Append_One;
+   end Append;
 
    ----------------------
    -- Append_Slow_Path --
@@ -250,7 +254,7 @@ is
          return;
       else
          Target.Clear;
-         Target.Append (Source);
+         Target.Append_Vector (Source);
       end if;
    end Assign;
 
@@ -1157,7 +1161,7 @@ is
 
          Container.Elements := new Elements_Type'
                                      (Last => New_Last,
-                                      EA   => (others => New_Item));
+                                      EA   => [others => New_Item]);
 
          --  The allocation of the new, internal array succeeded, so it is now
          --  safe to update the Last index, restoring container invariants.
@@ -1185,7 +1189,7 @@ is
                --  The new items are being appended to the vector, so no
                --  sliding of existing elements is required.
 
-               EA (Before .. New_Last) := (others => New_Item);
+               EA (Before .. New_Last) := [others => New_Item];
 
             else
                --  The new items are being inserted before some existing
@@ -1200,7 +1204,7 @@ is
                end if;
 
                EA (Index .. New_Last) := EA (Before .. Container.Last);
-               EA (Before .. Index - 1) := (others => New_Item);
+               EA (Before .. Index - 1) := [others => New_Item];
             end if;
          end;
 
@@ -1260,13 +1264,14 @@ is
       declare
          SA : Elements_Array renames Container.Elements.EA; -- source
          DA : Elements_Array renames Dst.EA;                -- destination
+         pragma Unreferenced (DA);
 
       begin
          DA (Index_Type'First .. Before - 1) :=
            SA (Index_Type'First .. Before - 1);
 
          if Before > Container.Last then
-            DA (Before .. New_Last) := (others => New_Item);
+            DA (Before .. New_Last) := [others => New_Item];
 
          else
             --  The new items are being inserted before some existing elements,
@@ -1278,7 +1283,7 @@ is
                Index := Index_Type'Base (Count_Type'Base (Before) + Count);
             end if;
 
-            DA (Before .. Index - 1) := (others => New_Item);
+            DA (Before .. Index - 1) := [others => New_Item];
             DA (Index .. New_Last) := SA (Before .. Container.Last);
          end if;
 
@@ -1310,7 +1315,7 @@ is
       end;
    end Insert;
 
-   procedure Insert
+   procedure Insert_Vector
      (Container : in out Vector;
       Before    : Extended_Index;
       New_Item  : Vector)
@@ -1429,9 +1434,9 @@ is
 
          Container.Elements.EA (K .. J) := Src;
       end;
-   end Insert;
+   end Insert_Vector;
 
-   procedure Insert
+   procedure Insert_Vector
      (Container : in out Vector;
       Before    : Cursor;
       New_Item  : Vector)
@@ -1461,10 +1466,10 @@ is
          Index := Before.Index;
       end if;
 
-      Insert (Container, Index, New_Item);
-   end Insert;
+      Insert_Vector (Container, Index, New_Item);
+   end Insert_Vector;
 
-   procedure Insert
+   procedure Insert_Vector
      (Container : in out Vector;
       Before    : Cursor;
       New_Item  : Vector;
@@ -1501,10 +1506,10 @@ is
          Index := Before.Index;
       end if;
 
-      Insert (Container, Index, New_Item);
+      Insert_Vector (Container, Index, New_Item);
 
       Position := (Container'Unrestricted_Access, Index);
-   end Insert;
+   end Insert_Vector;
 
    procedure Insert
      (Container : in out Vector;
@@ -1914,6 +1919,7 @@ is
       declare
          SA : Elements_Array renames Container.Elements.EA;  -- source
          DA : Elements_Array renames Dst.EA;                 -- destination
+         pragma Unreferenced (DA);
 
       begin
          DA (Index_Type'First .. Before - 1) :=
@@ -2266,11 +2272,6 @@ is
    -- Prepend --
    -------------
 
-   procedure Prepend (Container : in out Vector; New_Item : Vector) is
-   begin
-      Insert (Container, Index_Type'First, New_Item);
-   end Prepend;
-
    procedure Prepend
      (Container : in out Vector;
       New_Item  : Element_Type;
@@ -2279,6 +2280,15 @@ is
    begin
       Insert (Container, Index_Type'First, New_Item, Count);
    end Prepend;
+
+   --------------------
+   -- Prepend_Vector --
+   --------------------
+
+   procedure Prepend_Vector (Container : in out Vector; New_Item : Vector) is
+   begin
+      Insert_Vector (Container, Index_Type'First, New_Item);
+   end Prepend_Vector;
 
    --------------
    -- Previous --
@@ -2337,7 +2347,7 @@ is
    ---------------
 
    procedure Put_Image
-     (S : in out Ada.Strings.Text_Output.Sink'Class; V : Vector)
+     (S : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class; V : Vector)
    is
       First_Time : Boolean := True;
       use System.Put_Images;
@@ -3257,7 +3267,7 @@ is
          Last := Index_Type'Base (Count_Type'Base (No_Index) + Length);
       end if;
 
-      Elements := new Elements_Type'(Last, EA => (others => New_Item));
+      Elements := new Elements_Type'(Last, EA => [others => New_Item]);
 
       return (Controlled with Elements, Last, TC => <>);
    end To_Vector;

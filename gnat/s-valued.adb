@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 B o d y                                  --
 --                                                                          --
---            Copyright (C) 2020, Free Software Foundation, Inc.            --
+--            Copyright (C) 2020-2022, Free Software Foundation, Inc.       --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -35,7 +35,11 @@ with System.Value_R;
 
 package body System.Value_D is
 
-   package Impl is new Value_R (Uns, Floating => False);
+   pragma Assert (Int'Size <= Uns'Size);
+   --  We need an unsigned type large enough to represent the mantissa
+
+   package Impl is new Value_R (Uns, 2**(Int'Size - 1), Round => False);
+   --  We do not use the Extra digit for decimal fixed-point types
 
    function Integer_to_Decimal
      (Str    : String;
@@ -182,7 +186,7 @@ package body System.Value_D is
 
             elsif S > 0 then
                declare
-                  LS  : Integer := S;
+                  LS : Integer := S;
 
                begin
                   Y := Safe_Expont (B, LS, 10 ** Integer'Max (0, Scale));

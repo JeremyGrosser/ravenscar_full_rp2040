@@ -6,7 +6,7 @@
 --                                                                          --
 --                                  S p e c                                 --
 --                                                                          --
---                     Copyright (C) 2001-2020, AdaCore                     --
+--                     Copyright (C) 2001-2022, AdaCore                     --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -86,7 +86,7 @@ package System.Interrupts is
    -----------------------------
 
    procedure Install_Restricted_Handlers
-     (Prio     : Any_Priority;
+     (Prio     : Interrupt_Priority;
       Handlers : Handler_Array);
    --  Install the static Handlers for the given Interrupts. There is one call
    --  per protected object, and one element in Handlers for each handler of

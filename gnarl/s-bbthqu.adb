@@ -8,7 +8,7 @@
 --                                                                          --
 --        Copyright (C) 1999-2002 Universidad Politecnica de Madrid         --
 --             Copyright (C) 2003-2005 The European Space Agency            --
---                     Copyright (C) 2003-2020, AdaCore                     --
+--                     Copyright (C) 2003-2022, AdaCore                     --
 --                                                                          --
 -- GNARL is free software; you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -260,21 +260,13 @@ package body System.BB.Threads.Queues is
       CPU_Id      : constant CPU := Get_CPU (Thread);
 
    begin
-      --  ??? This pragma is disabled because the Tasks_Activated only
-      --  represents the end of activation for one package not all the
-      --  packages. We have to find a better milestone for the end of
-      --  tasks activation.
+      --  A CPU can only insert a task to its own queue, except during
+      --  elaboration where the main CPU will add new tasks to their
+      --  respective CPU's queues. Since the runtime doesn't have a
+      --  mechanism to detect when elaboration has finished, the assertion
+      --  can only catch non-Main CPUs accessing the wrong CPU queues.
 
-      --  --  A CPU can only insert alarm in its own queue, except during
-      --  --  initialization.
-
-      --  pragma Assert (CPU_Id = Current_CPU or else not Tasks_Activated);
-
-      --  It may be the case that we try to insert a task that is already in
-      --  the queue. This can only happen if the task was not runnable and its
-      --  context was being used for handling an interrupt. Hence, if the task
-      --  is already in the queue and we try to insert it, we need to check
-      --  whether it is in the correct place.
+      pragma Assert (CPU_Id = Current_CPU or else CPU_Id = CPU'First);
 
       --  No insertion if the task is already at the head of the queue
 

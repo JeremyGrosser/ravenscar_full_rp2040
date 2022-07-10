@@ -8,7 +8,7 @@
 --                                                                          --
 --        Copyright (C) 1999-2002 Universidad Politecnica de Madrid         --
 --             Copyright (C) 2003-2004 The European Space Agency            --
---                     Copyright (C) 2003-2020, AdaCore                     --
+--                     Copyright (C) 2003-2021, AdaCore                     --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -33,7 +33,6 @@
 
 pragma Restrictions (No_Elaboration_Code);
 
-with System;
 with System.Storage_Elements;
 with System.BB.Parameters;
 
@@ -71,7 +70,7 @@ package System.BB.CPU_Primitives is
      (Context : Context_Buffer;
       Index   : Context_Id) return Word;
    pragma Inline (Get_Context);
-   --  Returns item of the specified context.
+   --  Returns item of the specified context
 
    procedure Set_Context
      (Context : in out Context_Buffer;
@@ -86,9 +85,9 @@ package System.BB.CPU_Primitives is
       Argument        : System.Address;
       Stack_Pointer   : System.Address);
    pragma Inline (Initialize_Context);
-   --  Initialize_Context inserts inside the context buffer the default
-   --  values for each register. The values for the stack pointer, the
-   --  program counter, and argument to be passed are provided as arguments.
+   --  Initialize_Context initializes the context buffer with the default
+   --  values for each register. The values for program counter, the argument
+   --  to be passed and the stack pointer are provided as parameters.
 
    procedure Initialize_Stack
      (Base          : Address;
@@ -137,8 +136,8 @@ package System.BB.CPU_Primitives is
 private
    Context_Buffer_Size : constant :=
      Parameters.Context_Buffer_Capacity * System.Word_Size;
-   --  Size calculated taken into account that the components are 32-bit, and
-   --  that we want then aligned on 64-bit boundaries.
+   --  Size calculated taking into account that the components are 32-bit, and
+   --  that we want them aligned on 64-bit boundaries.
 
    type Context_Buffer is array (Context_Id) of System.Address;
    for Context_Buffer'Size use Context_Buffer_Size;

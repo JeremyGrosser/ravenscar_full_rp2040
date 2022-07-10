@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 S p e c                                  --
 --                                                                          --
---                     Copyright (C) 1999-2020, AdaCore                     --
+--                     Copyright (C) 1999-2022, AdaCore                     --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -33,11 +33,8 @@
 
 --  The full capability is currently supported on the following targets:
 
---     HP-UX ia64
---     GNU/Linux x86, x86_64, ia64
---     FreeBSD x86, x86_64
---     Solaris sparc and x86
---     Windows
+--     GNU/Linux x86, x86_64
+--     Windows x86, x86_64
 
 --  Note: on targets other than those listed above, a dummy implementation
 --  of the body returns a series of LF separated strings of the form "0x..."

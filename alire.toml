@@ -1,6 +1,6 @@
 name = "ravenscar_full_rp2040"
 description = "Ravenscar Full run-time for the RP2040"
-version = "0.1.0"
+version = "0.2.0"
 
 authors = ["AdaCore", "Jeremy Grosser", "Fabien Chouteau", "Daniel King"]
 maintainers = ["Jeremy Grosser <jeremy@synack.me>"]
@@ -9,4 +9,4 @@ maintainers-logins = ["JeremyGrosser"]
 project-files = ["ravenscar_build.gpr"]
 
 [[depends-on]]
-gnat_arm_elf = "^11"
+gnat_arm_elf = "^12"

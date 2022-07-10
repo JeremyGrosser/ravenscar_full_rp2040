@@ -6,7 +6,7 @@
 --                                                                          --
 --                                  S p e c                                 --
 --                                                                          --
---          Copyright (C) 1992-2020, Free Software Foundation, Inc.         --
+--          Copyright (C) 1992-2022, Free Software Foundation, Inc.         --
 --                                                                          --
 -- GNARL is free software; you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -352,7 +352,7 @@ package System.Tasking is
       --  it, once, as part of its execution.
 
       Compiler_Data : TSD;
-      --  Task-specific data needed by compiler to store per-task stuctures
+      --  Task-specific data needed by compiler to store per-task structures
       --
       --  Protection: Only accessed by Self
 
@@ -390,15 +390,6 @@ package System.Tasking is
       --  protected objects, and is protected by the protected object lock.
    end record;
    pragma Suppress_Initialization (Ada_Task_Control_Block);
-
-   --------------------------------
-   -- Master Related Definitions --
-   --------------------------------
-
-   subtype Master_Level is Integer;
-   subtype Master_ID is Master_Level;
-
-   Library_Task_Level : constant Master_Level := 3;
 
    ----------------------------------
    -- Secondary Stack Manipulation --

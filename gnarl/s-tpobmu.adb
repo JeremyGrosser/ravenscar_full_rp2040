@@ -7,7 +7,7 @@
 --                                                                          --
 --                               B o d y                                    --
 --                                                                          --
---                    Copyright (C) 2010-2020, AdaCore                      --
+--                    Copyright (C) 2010-2022, AdaCore                      --
 --                                                                          --
 -- GNARL is free software; you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -142,8 +142,6 @@ package body System.Tasking.Protected_Objects.Multiprocessors is
       Unlock (Served_Entry_Call (CPU_Id).Lock);
 
       while Entry_Call /= null loop
-         --  ??? This may insert a task on the ready queue of a different
-         --  processor.
          STPO.Wakeup (Entry_Call.Self, Entry_Caller_Sleep);
          Entry_Call := Entry_Call.Next;
       end loop;

@@ -8,7 +8,7 @@
 --                                                                          --
 --        Copyright (C) 1999-2002 Universidad Politecnica de Madrid         --
 --             Copyright (C) 2003-2005 The European Space Agency            --
---                     Copyright (C) 2003-2020, AdaCore                     --
+--                     Copyright (C) 2003-2022, AdaCore                     --
 --                                                                          --
 -- GNARL is free software; you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -38,7 +38,6 @@
 
 pragma Restrictions (No_Elaboration_Code);
 
-with System;
 with System.Storage_Elements;
 with System.BB.CPU_Primitives;
 with System.BB.Time;
@@ -199,10 +198,9 @@ package System.BB.Threads is
       Idle_Priority : Integer;
       Stack_Address : System.Address;
       Stack_Size    : System.Storage_Elements.Storage_Offset) with
-   --  Procedure to initialize the idle thread on a slave CPU.
-   --  This thread is used to handle interrupt if the CPU doesn't have any
-   --  other task. The initialization for the main CPU must have been
-   --  performed. The operations to perform are:
+   --  Procedure to initialize the idle thread on a slave CPU. The
+   --  initialization for the main CPU must have been performed. The
+   --  operations to perform are:
    --    - Initialize the thread descriptor
    --       * Set base CPU to the one on which this code executes
    --       * Set the base and active priority

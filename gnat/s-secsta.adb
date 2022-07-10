@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 B o d y                                  --
 --                                                                          --
---          Copyright (C) 1992-2020, Free Software Foundation, Inc.         --
+--          Copyright (C) 1992-2022, Free Software Foundation, Inc.         --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -121,7 +121,7 @@ package body System.Secondary_Stack is
 
       --  Check if max stack usage is increasing
 
-      if Stack.Max - Stack.Top - Mem_Request < 0  then
+      if Stack.Max - Stack.Top - Mem_Request < 0 then
          --  If so, check if the stack is exceeded, noting Stack.Top points to
          --  the first free byte (so the value of Stack.Top on a fully
          --  allocated stack will be Stack.Size + 1). The comparison is formed

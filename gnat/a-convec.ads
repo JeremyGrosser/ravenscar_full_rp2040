@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 S p e c                                  --
 --                                                                          --
---          Copyright (C) 2004-2020, Free Software Foundation, Inc.         --
+--          Copyright (C) 2004-2022, Free Software Foundation, Inc.         --
 --                                                                          --
 -- This specification is derived from the Ada Reference Manual for use with --
 -- GNAT. The copyright notice above, and the license provisions that follow --
@@ -36,7 +36,7 @@ with Ada.Iterator_Interfaces;
 with Ada.Containers.Helpers;
 private with Ada.Finalization;
 private with Ada.Streams;
-private with Ada.Strings.Text_Output;
+private with Ada.Strings.Text_Buffers;
 
 --  The language-defined generic package Containers.Vectors provides private
 --  types Vector and Cursor, and a set of operations for each type. A vector
@@ -95,7 +95,7 @@ is
       Default_Iterator  => Iterate,
       Iterator_Element  => Element_Type,
       Aggregate         => (Empty          => Empty,
-                            Add_Unnamed    => Append_One,
+                            Add_Unnamed    => Append,
                             New_Indexed    => New_Vector,
                             Assign_Indexed => Replace_Element);
 
@@ -332,38 +332,50 @@ is
 
    function New_Vector (First, Last : Index_Type) return Vector
      with Pre => First = Index_Type'First;
-   --  Ada_2020 aggregate operation.
+   --  Ada 2022 aggregate operation.
 
-   procedure Insert
+   procedure Insert_Vector
      (Container : in out Vector;
       Before    : Extended_Index;
       New_Item  : Vector);
    --  If Before is not in the range First_Index (Container) .. Last_Index
    --  (Container) + 1, then Constraint_Error is propagated. If
-   --  Length(New_Item) is 0, then Insert does nothing. Otherwise, it computes
-   --  the new length NL as the sum of the current length and Length
+   --  Length(New_Item) is 0, then Insert_Vector does nothing. Otherwise, it
+   --  computes the new length NL as the sum of the current length and Length
    --  (New_Item); if the value of Last appropriate for length NL would be
    --  greater than Index_Type'Last then Constraint_Error is propagated.
    --
    --  If the current vector capacity is less than NL, Reserve_Capacity
-   --  (Container, NL) is called to increase the vector capacity. Then Insert
-   --  slides the elements in the range Before .. Last_Index (Container) up by
-   --  Length(New_Item) positions, and then copies the elements of New_Item to
-   --  the positions starting at Before. Any exception raised during the
-   --  copying is propagated.
+   --  (Container, NL) is called to increase the vector capacity. Then
+   --  Insert_Vector slides the elements in the range Before .. Last_Index
+   --  (Container) up by Length(New_Item) positions, and then copies the
+   --  elements of New_Item to the positions starting at Before. Any exception
+   --  raised during the copying is propagated.
 
    procedure Insert
+     (Container : in out Vector;
+      Before    : Extended_Index;
+      New_Item  : Vector) renames Insert_Vector;
+   --  Retained for now for compatibility; AI12-0400 will remove this.
+
+   procedure Insert_Vector
      (Container : in out Vector;
       Before    : Cursor;
       New_Item  : Vector);
    --  If Before is not No_Element, and does not designate an element in
    --  Container, then Program_Error is propagated. Otherwise, if
-   --  Length(New_Item) is 0, then Insert does nothing. If Before is
-   --  No_Element, then the call is equivalent to Insert (Container, Last_Index
-   --  (Container) + 1, New_Item); otherwise the call is equivalent to Insert
-   --  (Container, To_Index (Before), New_Item);
+   --  Length(New_Item) is 0, then Insert_Vector does nothing. If Before is
+   --  No_Element, then the call is equivalent to Insert_Vector (Container,
+   --  Last_Index (Container) + 1, New_Item); otherwise the call is equivalent
+   --  to Insert_Vector (Container, To_Index (Before), New_Item);
 
    procedure Insert
+     (Container : in out Vector;
+      Before    : Cursor;
+      New_Item  : Vector) renames Insert_Vector;
+   --  Retained for now for compatibility; AI12-0400 will remove this.
+
+   procedure Insert_Vector
      (Container : in out Vector;
       Before    : Cursor;
       New_Item  : Vector;
@@ -371,22 +383,31 @@ is
    --  If Before is not No_Element, and does not designate an element in
    --  Container, then Program_Error is propagated. If Before equals
    --  No_Element, then let T be Last_Index (Container) + 1; otherwise, let T
-   --  be To_Index (Before). Insert (Container, T, New_Item) is called, and
-   --  then Position is set to To_Cursor (Container, T).
+   --  be To_Index (Before). Insert_Vector (Container, T, New_Item) is called,
+   --  and then Position is set to To_Cursor (Container, T).
+
+   procedure Insert
+     (Container : in out Vector;
+      Before    : Cursor;
+      New_Item  : Vector;
+      Position  : out Cursor) renames Insert_Vector;
+   --  Retained for now for compatibility; AI12-0400 will remove this.
 
    procedure Insert
      (Container : in out Vector;
       Before    : Extended_Index;
       New_Item  : Element_Type;
       Count     : Count_Type := 1);
-   --  Equivalent to Insert (Container, Before, To_Vector (New_Item, Count));
+   --  Equivalent to:
+   --  Insert_Vector (Container, Before, To_Vector (New_Item, Count));
 
    procedure Insert
      (Container : in out Vector;
       Before    : Cursor;
       New_Item  : Element_Type;
       Count     : Count_Type := 1);
-   --  Equivalent to Insert (Container, Before, To_Vector (New_Item, Count));
+   --  Equivalent to:
+   --  Insert_Vector (Container, Before, To_Vector (New_Item, Count));
 
    procedure Insert
      (Container : in out Vector;
@@ -395,7 +416,7 @@ is
       Position  : out Cursor;
       Count     : Count_Type := 1);
    --  Equivalent to
-   --  Insert (Container, Before, To_Vector (New_Item, Count), Position);
+   --  Insert_Vector (Container, Before, To_Vector (New_Item, Count), Position)
 
    procedure Insert
      (Container : in out Vector;
@@ -425,10 +446,15 @@ is
    --  be To_Index (Before). Insert (Container, T, Count) is called, and then
    --  Position is set to To_Cursor (Container, T).
 
-   procedure Prepend
+   procedure Prepend_Vector
      (Container : in out Vector;
       New_Item  : Vector);
    --  Equivalent to Insert (Container, First_Index (Container), New_Item).
+
+   procedure Prepend
+     (Container : in out Vector;
+      New_Item  : Vector) renames Prepend_Vector;
+   --  Retained for now for compatibility; AI12-0400 will remove this.
 
    procedure Prepend
      (Container : in out Vector;
@@ -437,21 +463,25 @@ is
    --  Equivalent to Insert (Container, First_Index (Container), New_Item,
    --  Count).
 
-   procedure Append
+   procedure Append_Vector
      (Container : in out Vector;
       New_Item  : Vector);
    --  Equivalent to Insert (Container, Last_Index (Container) + 1, New_Item).
 
    procedure Append
      (Container : in out Vector;
+      New_Item  : Vector) renames Append_Vector;
+   --  Retained for now for compatibility; AI12-0400 will remove this.
+
+   procedure Append
+     (Container : in out Vector;
       New_Item  : Element_Type;
-      Count     : Count_Type := 1);
+      Count     : Count_Type);
    --  Equivalent to Insert (Container, Last_Index (Container) + 1, New_Item,
    --  Count).
 
-   procedure Append_One (Container : in out Vector;
-                         New_Item  :        Element_Type);
-   --  Ada_2020 aggregate operation.
+   procedure Append (Container : in out Vector;
+                     New_Item  :        Element_Type);
 
    procedure Insert_Space
      (Container : in out Vector;
@@ -715,7 +745,7 @@ private
    end record with Put_Image => Put_Image;
 
    procedure Put_Image
-     (S : in out Ada.Strings.Text_Output.Sink'Class; V : Vector);
+     (S : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class; V : Vector);
 
    overriding procedure Adjust (Container : in out Vector);
    overriding procedure Finalize (Container : in out Vector);

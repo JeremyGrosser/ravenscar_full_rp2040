@@ -6,7 +6,7 @@
 --                                                                          --
 --                                  S p e c                                 --
 --                                                                          --
---                     Copyright (C) 2001-2020, AdaCore                    --
+--                     Copyright (C) 2001-2022, AdaCore                    --
 --                                                                          --
 -- This specification is derived from the Ada Reference Manual for use with --
 -- GNAT. The copyright notice above, and the license provisions that follow --
@@ -36,7 +36,6 @@
 --  Ravenscar version of this package for generic bare board targets
 
 with System.OS_Interface;
-pragma Elaborate_All (System.OS_Interface);
 
 package Ada.Real_Time with
   SPARK_Mode,

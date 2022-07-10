@@ -1,0 +1,1 @@
+../gnat/a-sttebu.ads

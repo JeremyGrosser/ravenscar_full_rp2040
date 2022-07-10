@@ -6,7 +6,7 @@
 --                                                                          --
 --                                  S p e c                                 --
 --                                                                          --
---          Copyright (C) 2001-2020, Free Software Foundation, Inc.         --
+--          Copyright (C) 2001-2022, Free Software Foundation, Inc.         --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -60,9 +60,8 @@ private
 
       Thread : aliased System.OS_Interface.Thread_Id :=
                  System.OS_Interface.Null_Thread_Id;
-      --  Thread Id associated to the ATCB to which it belongs.
-      --  ??? It is mostly used by GDB, so we may want to remove it at some
-      --  point.
+      --  Thread Id associated to the ATCB to which it belongs, mostly used by
+      --  GDB.
       pragma Atomic (Thread);
       --  Thread field may be updated by two different threads of control.
       --  (See, Enter_Task and Create_Task in s-taprop.adb).
