@@ -16,7 +16,7 @@ def package_name(path):
                 line = line.split(' ')[1:]
                 if line[0] == 'body':
                     line = line[1:]
-                return line[0]
+                return line[0].strip('\r\n\t $')
 
 def basename(filename):
     return filename.split('.', 1)[0]
@@ -29,6 +29,7 @@ if not os.path.exists('links'):
 for source in sources:
     for dirpath, dirnames, filenames in os.walk(source):
         for filename in filenames:
+            filename = filename.strip('\r\n\t $')
             path = os.path.join(dirpath, filename)
             pn = package_name(path)
             if pn is not None:
@@ -36,10 +37,12 @@ for source in sources:
 
     for dirpath, dirnames, filenames in os.walk(source):
         for filename in filenames:
+            filename = filename.strip('\r\n\t $')
             path = os.path.join(dirpath, filename)
             pn = bases.get(basename(filename), None)
             if pn is not None:
                 newname = '%s.%s' % (pn.lower().replace('.', '-'), filename.rsplit('.', 1)[-1])
+                newname = newname.strip('\r\n\t ')
                 newname = os.path.join(links, newname)
                 path = os.path.join('../', path)
                 print('ln', '-s', path, newname)
