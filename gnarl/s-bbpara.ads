@@ -124,7 +124,7 @@ package System.BB.Parameters is
    -- CPUs --
    ----------
 
-   Max_Number_Of_CPUs : constant := 1;
+   Max_Number_Of_CPUs : constant := 2;
    --  Maximum number of CPUs
 
    Multiprocessor : constant Boolean := Max_Number_Of_CPUs /= 1;

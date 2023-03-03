@@ -131,7 +131,7 @@ package System.BB.Board_Parameters is
    -- Hardware clock --
    --------------------
 
-   Runtime_Uses_SysTick : constant Boolean := True;
+   Runtime_Uses_SysTick : constant Boolean := False;
 
    Main_Clock_Frequency : constant Hertz := (if Runtime_Uses_SysTick
                                              then Clk_Sys_Frequency
