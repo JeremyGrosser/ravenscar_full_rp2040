@@ -2,7 +2,9 @@
 --                                                                          --
 --                         GNAT RUN-TIME COMPONENTS                         --
 --                                                                          --
---             Copyright (C) 2021, Free Software Foundation, Inc.           --
+--            Copyright (C) AdaCore and other contributors, 2022            --
+--      See https://github.com/AdaCore/bb-runtimes/graphs/contributors      --
+--                           for more information                           --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -25,13 +27,17 @@
 --                                                                          --
 ------------------------------------------------------------------------------
 
---  This package implements some intrinsic not provided by GCC for the armv6m
---  architecture.
+--  This package implements some intrinsics not provided by GCC for the armv6m
+--  architecture. An RP2040 hardware spinlock is used to ensure atomicity
+--  across all processors.
 
-with Interfaces;
 with Interfaces.C;
 
-package System.BB.Armv6m_Atomic is
+package System.BB.RP2040_Atomic is
+
+   ------------------------------
+   -- __sync_lock_test_and_set --
+   ------------------------------
 
    generic
       type T is mod <>;
@@ -43,6 +49,10 @@ package System.BB.Armv6m_Atomic is
       new Sync_Lock_Test_And_Set (Interfaces.Unsigned_8);
    pragma Export (C, Sync_Lock_Test_And_Set_1,
                   "__sync_lock_test_and_set_1");
+
+   ----------------------------------
+   -- __sync_bool_compare_and_swap --
+   ----------------------------------
 
    generic
       type T is mod <>;
@@ -70,4 +80,23 @@ private
    procedure Enable_Interrupts
      with Inline_Always;
 
-end System.BB.Armv6m_Atomic;
+   procedure Spinlock_Lock
+     with Inline_Always,
+     Pre => Interrupt_Disabled;
+   --  Obtain the hardware spinlock.
+   --
+   --  This must be called with interrupts disabled to avoid deadlocks when
+   --  an interrupt occurs and tries to do an atomic operation immediately
+   --  after the spinlock was obtained by a lower priority task/interrupt.
+
+   procedure Spinlock_Unlock
+     with Inline_Always;
+
+   generic
+      with procedure Wrapped_Proc;
+   procedure Atomic_Wrapper
+     with Inline_Always;
+   --  Calls Wrapped_Proc with interrupts disabled
+   --  and the hardware spinlock obtained (locked).
+
+end System.BB.RP2040_Atomic;
