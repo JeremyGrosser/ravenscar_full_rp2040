@@ -1,1 +1,0 @@
-../gnat/i-cobol.ads

@@ -1,1 +1,0 @@
-../gnat/s-caun16.adb

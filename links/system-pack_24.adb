@@ -1,1 +1,0 @@
-../gnat/s-pack24.adb

@@ -1,1 +1,0 @@
-../gnat/s-imgllb.ads

@@ -1,1 +1,0 @@
-../gnat/s-pack17.ads

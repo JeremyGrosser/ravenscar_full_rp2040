@@ -1,1 +1,0 @@
-../gnat/s-exponn.ads

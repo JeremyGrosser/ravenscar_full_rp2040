@@ -1,1 +1,0 @@
-../gnat/s-fode64.ads

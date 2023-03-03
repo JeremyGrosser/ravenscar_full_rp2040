@@ -1,1 +1,0 @@
-../gnat/s-wchcnv.ads

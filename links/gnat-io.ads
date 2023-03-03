@@ -1,1 +1,0 @@
-../gnat/g-io.ads

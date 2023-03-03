@@ -1,1 +1,0 @@
-../gnat/g-sechas.adb

@@ -1,1 +1,0 @@
-../gnat/s-casi32.ads

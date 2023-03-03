@@ -1,1 +1,0 @@
-../gnat/s-bb.ads

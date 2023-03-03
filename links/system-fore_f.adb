@@ -1,1 +1,0 @@
-../gnat/s-fore_f.adb

@@ -1,1 +1,0 @@
-../gnat/s-vafi64.ads

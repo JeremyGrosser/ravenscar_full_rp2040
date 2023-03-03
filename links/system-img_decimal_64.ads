@@ -1,1 +1,0 @@
-../gnat/s-imde64.ads

@@ -1,1 +1,0 @@
-../gnat/s-spsufi.adb

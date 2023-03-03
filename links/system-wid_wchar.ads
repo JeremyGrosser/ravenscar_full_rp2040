@@ -1,1 +1,0 @@
-../gnat/s-widwch.ads

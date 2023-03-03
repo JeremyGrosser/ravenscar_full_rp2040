@@ -1,1 +1,0 @@
-../gnarl/s-tasinf.ads

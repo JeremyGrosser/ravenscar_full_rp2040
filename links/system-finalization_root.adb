@@ -1,1 +1,0 @@
-../gnat/s-finroo.adb

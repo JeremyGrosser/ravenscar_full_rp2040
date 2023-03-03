@@ -1,1 +1,0 @@
-../gnat/s-imgwiu.ads

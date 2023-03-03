@@ -1,1 +1,0 @@
-../gnat/s-imen16.ads

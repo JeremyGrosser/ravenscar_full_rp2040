@@ -1,1 +1,0 @@
-../gnarl/s-tpobop.adb

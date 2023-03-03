@@ -1,1 +1,0 @@
-../gnarl/s-taskin.ads

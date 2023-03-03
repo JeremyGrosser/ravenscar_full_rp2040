@@ -1,1 +1,0 @@
-../gnat/s-parame.ads

@@ -1,1 +1,0 @@
-../gnat/i-rp2040-clocks.ads

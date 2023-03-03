@@ -1,1 +1,0 @@
-../gnat/s-casi16.ads

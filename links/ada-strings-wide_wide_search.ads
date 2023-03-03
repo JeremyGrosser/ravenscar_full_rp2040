@@ -1,1 +1,0 @@
-../gnat/a-stzsea.ads

@@ -1,1 +1,0 @@
-../gnat/s-pack23.adb

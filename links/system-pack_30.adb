@@ -1,1 +1,0 @@
-../gnat/s-pack30.adb

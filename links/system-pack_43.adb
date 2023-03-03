@@ -1,1 +1,0 @@
-../gnat/s-pack43.adb

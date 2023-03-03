@@ -1,1 +1,0 @@
-../gnat/s-bbmcpa.ads

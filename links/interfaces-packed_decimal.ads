@@ -1,1 +1,0 @@
-../gnat/i-pacdec.ads

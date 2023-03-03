@@ -1,1 +1,0 @@
-../gnat/a-swunau.adb

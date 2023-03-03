@@ -1,1 +1,0 @@
-../gnat/s-arit64.adb

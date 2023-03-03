@@ -1,1 +1,0 @@
-../gnat/s-imgbiu.ads

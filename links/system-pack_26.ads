@@ -1,1 +1,0 @@
-../gnat/s-pack26.ads

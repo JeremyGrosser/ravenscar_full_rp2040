@@ -1,1 +1,0 @@
-../gnarl/s-osinte.ads

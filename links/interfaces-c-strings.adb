@@ -1,1 +1,0 @@
-../gnat/i-cstrin.adb

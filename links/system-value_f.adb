@@ -1,1 +1,0 @@
-../gnat/s-valuef.adb

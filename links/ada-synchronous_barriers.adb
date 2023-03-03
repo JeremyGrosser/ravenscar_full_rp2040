@@ -1,1 +1,0 @@
-../gnarl/a-synbar.adb
