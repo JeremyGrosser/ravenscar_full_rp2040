@@ -10,11 +10,3 @@ project-files = ["ravenscar_build.gpr"]
 
 [[depends-on]]
 gnat_arm_elf = "^12"
-rp2040_hal = "^2.0.1"
-
-[configuration.values]
-rp2040_hal.Interrupts = "bb_runtimes"
-rp2040_hal.Use_Startup = false
-
-[[pins]]
-rp2040_hal = { url='https://github.com/JeremyGrosser/rp2040_hal' }
