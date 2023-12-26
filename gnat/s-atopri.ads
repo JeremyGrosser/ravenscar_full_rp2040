@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 S p e c                                  --
 --                                                                          --
---              Copyright (C) 2012-2022, Free Software Foundation, Inc.     --
+--              Copyright (C) 2012-2023, Free Software Foundation, Inc.     --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -32,6 +32,8 @@
 --  This package contains both atomic primitives defined from GCC built-in
 --  functions and operations used by the compiler to generate the lock-free
 --  implementation of protected objects.
+--  This is the version that only contains primitives available on 32 bit
+--  platforms.
 
 with Interfaces.C;
 
@@ -48,9 +50,6 @@ package System.Atomic_Primitives is
 
    type uint32 is mod 2**32
      with Size => 32;
-
-   type uint64 is mod 2**64
-     with Size => 64;
 
    Relaxed : constant := 0;
    Consume : constant := 1;
@@ -76,7 +75,6 @@ package System.Atomic_Primitives is
    function Atomic_Load_8  is new Atomic_Load (uint8);
    function Atomic_Load_16 is new Atomic_Load (uint16);
    function Atomic_Load_32 is new Atomic_Load (uint32);
-   function Atomic_Load_64 is new Atomic_Load (uint64);
 
    generic
       type Atomic_Type is mod <>;
@@ -93,7 +91,6 @@ package System.Atomic_Primitives is
    function Atomic_Compare_Exchange_8  is new Atomic_Compare_Exchange (uint8);
    function Atomic_Compare_Exchange_16 is new Atomic_Compare_Exchange (uint16);
    function Atomic_Compare_Exchange_32 is new Atomic_Compare_Exchange (uint32);
-   function Atomic_Compare_Exchange_64 is new Atomic_Compare_Exchange (uint64);
 
    function Atomic_Test_And_Set
      (Ptr   : System.Address;
@@ -134,7 +131,6 @@ package System.Atomic_Primitives is
    function Lock_Free_Read_8  is new Lock_Free_Read (uint8);
    function Lock_Free_Read_16 is new Lock_Free_Read (uint16);
    function Lock_Free_Read_32 is new Lock_Free_Read (uint32);
-   function Lock_Free_Read_64 is new Lock_Free_Read (uint64);
 
    generic
       type Atomic_Type is mod <>;
@@ -146,7 +142,6 @@ package System.Atomic_Primitives is
    function Lock_Free_Try_Write_8  is new Lock_Free_Try_Write (uint8);
    function Lock_Free_Try_Write_16 is new Lock_Free_Try_Write (uint16);
    function Lock_Free_Try_Write_32 is new Lock_Free_Try_Write (uint32);
-   function Lock_Free_Try_Write_64 is new Lock_Free_Try_Write (uint64);
 
 private
    pragma Inline (Lock_Free_Read);

@@ -7,7 +7,7 @@
    Loader : Loaders := external("LOADER", "ROM");
 
    package Compiler is
-      Common_Required_Switches := ("-mlittle-endian", "-mthumb", "-mfloat-abi=soft", "-mcpu=cortex-m0plus");
+      Common_Required_Switches := ("-mlittle-endian", "-mthumb", "-mfloat-abi=soft", "-mcpu=cortex-m0plus", "-fno-tree-loop-distribute-patterns");
 
       for Leading_Required_Switches ("Ada") use
          Compiler'Leading_Required_Switches ("Ada") &
@@ -29,7 +29,7 @@
    package Linker is
       for Required_Switches use Linker'Required_Switches &
         ("-Wl,-L${RUNTIME_DIR(Ada)}/adalib",
-         "-nostartfiles", "-nolibc", "-Wl,--start-group,-lgnarl,-lgnat,-lc,-lgcc,--end-group",
+         "-nostartfiles", "-nolibc", "-Wl,--start-group,-lgnarl,-lgnat,-lc,-lgcc,-lgcc_eh,--end-group",
          "-L${RUNTIME_DIR(ada)}/ld_user",
          "-L${RUNTIME_DIR(ada)}/ld") &
          Compiler.Common_Required_Switches;

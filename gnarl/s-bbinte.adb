@@ -8,7 +8,7 @@
 --                                                                          --
 --        Copyright (C) 1999-2002 Universidad Politecnica de Madrid         --
 --             Copyright (C) 2003-2005 The European Space Agency            --
---                     Copyright (C) 2003-2022, AdaCore                     --
+--                     Copyright (C) 2003-2023, AdaCore                     --
 --                                                                          --
 -- GNARL is free software; you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -204,7 +204,7 @@ package body System.BB.Interrupts is
       --  Call the user handler
 
       if Interrupt_Handlers_Table (Id) = null then
-         raise Program_Error with "No handler for interrupt" & Id'Img;
+         raise Program_Error with "No handler for interrupt";
       else
          Interrupt_Handlers_Table (Id).all (Id);
       end if;

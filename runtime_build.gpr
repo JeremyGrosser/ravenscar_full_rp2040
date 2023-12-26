@@ -1,7 +1,7 @@
 with "target_options.gpr";
 
 project Runtime_Build is
-  for Languages use ("Ada", "Asm_Cpp", "C");
+  for Languages use ("Ada", "C", "Asm_Cpp");
   for Runtime ("Ada") use Project'Project_Dir;
   for Target use "arm-eabi";
 
@@ -19,10 +19,6 @@ project Runtime_Build is
   package Naming is
      for Spec_Suffix ("Asm_CPP") use ".inc";
   end Naming;
-
-  package Builder is
-     for Default_Switches ("Ada") use Target_Options.LFLAGS;
-  end Builder;
 
   package Compiler is
      for Default_Switches ("C") use Target_Options.ALL_CFLAGS;
@@ -75,17 +71,18 @@ project Runtime_Build is
     for Proof_Switches ("a-strsup.adb") use ("--level=4", "--timeout=30");
     for Proof_Switches ("i-c.adb") use ("--level=4", "--timeout=120");
     for Proof_Switches ("s-arit32.adb") use ("--level=3", "--prover=all");
-    for Proof_Switches ("s-arit64.adb") use ("--level=3", "--prover=z3,cvc5,cvc4,altergo,colibri");
+    for Proof_Switches ("s-arit64.adb") use ("--level=3", "--prover=all");
     for Proof_Switches ("s-expmod.adb") use ("--level=2");
     for Proof_Switches ("s-imgboo.adb") use ("--level=3");
     for Proof_Switches ("s-valboo.adb") use ("--level=3");
     for Proof_Switches ("s-valint.ads") use ("--level=2");
-    for Proof_Switches ("s-vallli.ads") use ("--level=3");
-    for Proof_Switches ("s-valllli.ads") use ("--level=3");
-    for Proof_Switches ("s-valuns.ads") use ("--level=4");
-    for Proof_Switches ("s-valllu.ads") use ("--level=4");
+    for Proof_Switches ("s-vallli.ads") use ("--level=2");
+    for Proof_Switches ("s-valllli.ads") use ("--level=2");
+    for Proof_Switches ("s-valuns.ads") use ("--level=2");
+    for Proof_Switches ("s-valllu.ads") use ("--level=3");
     for Proof_Switches ("s-vallllu.ads") use ("--level=4");
     for Proof_Switches ("s-valuti.adb") use ("--level=3");
+    for Proof_Switches ("s-vsllli.ads") use ("--level=3");
 
     --  Bump level for proof of Lemma_Div_Twice which should ideally be
     --  factored out in the future.
@@ -103,5 +100,9 @@ project Runtime_Build is
     for Proof_Switches ("s-imglli.ads") use ("--level=2");
     for Proof_Switches ("s-imgllli.ads") use ("--level=3");
   end Prove;
+
+  package CodePeer is
+    for Excluded_Source_Files use ("a-chahan.adb", "a-strbou.adb", "a-strfix.adb", "a-strmap.adb", "a-strsea.adb", "a-strsup.adb", "g-io.adb", "i-c.adb", "s-arit32.adb", "s-arit64.adb", "s-casuti.adb", "s-exnint.adb", "s-exnlli.adb", "s-exnllli.ads", "s-expint.adb", "s-explli.adb", "s-expllli.ads", "s-explllu.ads", "s-expllu.adb", "s-expmod.adb", "s-expuns.adb", "s-gearop.adb", "s-imgboo.adb", "s-imgint.adb", "s-imglli.adb", "s-imgllli.ads", "s-imglllu.ads", "s-imgllu.adb", "s-imguns.adb", "s-valboo.adb", "s-valint.adb", "s-vallli.adb", "s-valllli.ads", "s-vallllu.ads", "s-valllu.adb", "s-valuns.adb", "s-valuti.adb", "s-veboop.adb", "s-widint.ads", "s-widlli.adb", "s-widllli.ads", "s-widlllu.ads", "s-widllu.adb", "s-widuns.ads");
+  end CodePeer;
 
 end Runtime_Build;

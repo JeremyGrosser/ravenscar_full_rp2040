@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 S p e c                                  --
 --                                                                          --
---                     Copyright (C) 2004-2022, AdaCore                     --
+--                     Copyright (C) 2004-2023, AdaCore                     --
 --                                                                          --
 -- This specification is derived from the Ada Reference Manual for use with --
 -- GNAT. The copyright notice above, and the license provisions that follow --
@@ -182,7 +182,7 @@ private
    --  within the constraints on the components that make up a date.
 
    type Constrained_Modified_Julian_Day is delta Duration'Small / 86_400.0
-      range 15_385.0 .. 88_069.0;
+      range 0.0 .. 88_069.0;
    for Constrained_Modified_Julian_Day'Small use Duration'Small / 86_400.0;
 
    subtype Modified_Julian_Day is Constrained_Modified_Julian_Day'Base;

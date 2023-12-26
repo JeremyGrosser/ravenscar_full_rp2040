@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 S p e c                                  --
 --                                                                          --
---          Copyright (C) 1999-2022, Free Software Foundation, Inc.         --
+--          Copyright (C) 1999-2023, Free Software Foundation, Inc.         --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -33,7 +33,13 @@
 --  execution location. The traceback shows the locations of calls in the call
 --  chain, up to either the top or a designated number of levels.
 
---  This version is for the AE653 Level A run time and for bare board targets
+--  This version is for the light* run-times and for bare board targets
+
+--  Note:
+--  On some targets tracebacks cannot be implmented. In this case
+--  Call_Chain will return an empty Tracebacks_Array.
+--  The list currently includes:
+--     1)  arm-qnx
 
 with System.Traceback_Entries;
 

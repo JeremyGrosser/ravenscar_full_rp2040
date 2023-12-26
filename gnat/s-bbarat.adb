@@ -2,9 +2,7 @@
 --                                                                          --
 --                         GNAT RUN-TIME COMPONENTS                         --
 --                                                                          --
---            Copyright (C) AdaCore and other contributors, 2022            --
---      See https://github.com/AdaCore/bb-runtimes/graphs/contributors      --
---                           for more information                           --
+--             Copyright (C) 2018, Free Software Foundation, Inc.           --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -27,12 +25,10 @@
 --                                                                          --
 ------------------------------------------------------------------------------
 
-with System.Machine_Code;   use System.Machine_Code;
-with System.BB.Parameters;
-with Interfaces;            use Interfaces;
-with Interfaces.RP2040.SIO; use Interfaces.RP2040.SIO;
+with System.Machine_Code; use System.Machine_Code;
+with Interfaces;          use Interfaces;
 
-package body System.BB.RP2040_Atomic is
+package body System.BB.Armv6m_Atomic is
 
    -------------
    -- PRIMASK --
@@ -79,62 +75,6 @@ package body System.BB.RP2040_Atomic is
            Volatile => True);
    end Enable_Interrupts;
 
-   -------------------
-   -- Spinlock_Lock --
-   -------------------
-
-   procedure Spinlock_Lock is
-      use type Interfaces.RP2040.UInt32;
-   begin
-      --  Reads attempt to claim the lock.
-      --  Read value is nonzero if the lock was successfully claimed,
-      --  or zero if the lock had already been claimed by a previous read.
-      loop
-         exit when SIO_Periph.SPINLOCK31 /= 0;
-      end loop;
-   end Spinlock_Lock;
-
-   ---------------------
-   -- Spinlock_Unlock --
-   ---------------------
-
-   procedure Spinlock_Unlock is
-   begin
-      --  Write any value to release the lock
-      SIO_Periph.SPINLOCK31 := 0;
-   end Spinlock_Unlock;
-
-   --------------------
-   -- Atomic_Wrapper --
-   --------------------
-
-   procedure Atomic_Wrapper is
-      Already_Disabled : constant Boolean := Interrupt_Disabled;
-      --  Make sure not to change the status of interrupt control by checking
-      --  if they are enabled when entering the function.
-   begin
-
-      if not Already_Disabled then
-         Disable_Interrupts;
-      end if;
-
-      if System.BB.Parameters.Multiprocessor then
-         Spinlock_Lock;
-      end if;
-
-      Wrapped_Proc;
-
-      if System.BB.Parameters.Multiprocessor then
-         Spinlock_Unlock;
-      end if;
-
-      --  If the interrupts were disabled when entering this function, we do
-      --  not want enable them.
-      if not Already_Disabled then
-         Enable_Interrupts;
-      end if;
-   end Atomic_Wrapper;
-
    ----------------------------
    -- Sync_Lock_Test_And_Set --
    ----------------------------
@@ -146,20 +86,24 @@ package body System.BB.RP2040_Atomic is
       Data : T with Address => Addr;
       Ret  : T;
 
-      procedure Inner
-        with Inline_Always;
-
-      procedure Inner
-      is
-      begin
-         Ret  := Data;
-         Data := Value;
-      end Inner;
-
-      procedure Atomic_Action is new Atomic_Wrapper (Inner);
-
+      Already_Disabled : constant Boolean := Interrupt_Disabled;
+      --  Make sure not to change the status of interrupt control by checking
+      --  if they are enabled when entering the function.
    begin
-      Atomic_Action;
+
+      if not Already_Disabled then
+         Disable_Interrupts;
+      end if;
+
+      Ret := Data;
+      Data := Value;
+
+      --  If the interrupts were disabled when entering this function, we do
+      --  not want enable them.
+      if not Already_Disabled then
+         Enable_Interrupts;
+      end if;
+
       return Ret;
    end Sync_Lock_Test_And_Set;
 
@@ -175,25 +119,29 @@ package body System.BB.RP2040_Atomic is
       Data : T with Address => Addr;
       Ret  : Interfaces.C.char;
 
-      procedure Inner
-        with Inline_Always;
-
-      procedure Inner
-      is
-      begin
-         if Data = Old_Value then
-            Data := New_Value;
-            Ret := Interfaces.C.char'Succ (Interfaces.C.nul); -- True
-         else
-            Ret := Interfaces.C.nul; -- False
-         end if;
-      end Inner;
-
-      procedure Atomic_Action is new Atomic_Wrapper (Inner);
-
+      Already_Disabled : constant Boolean := Interrupt_Disabled;
+      --  Make sure not to change the status of interrupt control by checking
+      --  if they are enabled when entering the function.
    begin
-      Atomic_Action;
+
+      if not Already_Disabled then
+         Disable_Interrupts;
+      end if;
+
+      if Data = Old_Value then
+         Data := New_Value;
+         Ret := Interfaces.C.char'Succ (Interfaces.C.nul); -- True
+      else
+         Ret := Interfaces.C.nul; -- False
+      end if;
+
+      --  If the interrupts were disabled when entering this function, we do
+      --  not want enable them.
+      if not Already_Disabled then
+         Enable_Interrupts;
+      end if;
+
       return Ret;
    end Sync_Bool_Compare_And_Swap;
 
-end System.BB.RP2040_Atomic;
+end System.BB.Armv6m_Atomic;

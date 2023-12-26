@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 B o d y                                  --
 --                                                                          --
---            Copyright (C) 2020-2022, Free Software Foundation, Inc.       --
+--            Copyright (C) 2020-2023, Free Software Foundation, Inc.       --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -104,7 +104,7 @@ is
 
    function To_Neg_Int (A : Uns32) return Int32
    with
-     Annotate => (GNATprove, Terminating),
+     Annotate => (GNATprove, Always_Return),
      Pre      => In_Int32_Range (-Big (A)),
      Post     => Big (To_Neg_Int'Result) = -Big (A);
    --  Convert to negative integer equivalent. If the input is in the range
@@ -114,7 +114,7 @@ is
 
    function To_Pos_Int (A : Uns32) return Int32
    with
-     Annotate => (GNATprove, Terminating),
+     Annotate => (GNATprove, Always_Return),
      Pre      => In_Int32_Range (Big (A)),
      Post     => Big (To_Pos_Int'Result) = Big (A);
    --  Convert to positive integer equivalent. If the input is in the range
@@ -195,12 +195,6 @@ is
        or else (X >= Big_0 and then Y <= Big_0),
      Post => X * Y <= Big_0;
 
-   procedure Lemma_Neg_Div (X, Y : Big_Integer)
-   with
-     Ghost,
-     Pre  => Y /= 0,
-     Post => X / Y = (-X) / (-Y);
-
    procedure Lemma_Neg_Rem (X, Y : Big_Integer)
    with
      Ghost,
@@ -223,6 +217,7 @@ is
    -----------------------------
 
    procedure Lemma_Abs_Commutation (X : Int32) is null;
+   procedure Lemma_Abs_Div_Commutation (X, Y : Big_Integer) is null;
    procedure Lemma_Abs_Mult_Commutation (X, Y : Big_Integer) is null;
    procedure Lemma_Div_Commutation (X, Y : Uns64) is null;
    procedure Lemma_Div_Ge (X, Y, Z : Big_Integer) is null;
@@ -233,22 +228,6 @@ is
    procedure Lemma_Neg_Rem (X, Y : Big_Integer) is null;
    procedure Lemma_Not_In_Range_Big2xx32 is null;
    procedure Lemma_Rem_Commutation (X, Y : Uns64) is null;
-
-   -------------------------------
-   -- Lemma_Abs_Div_Commutation --
-   -------------------------------
-
-   procedure Lemma_Abs_Div_Commutation (X, Y : Big_Integer) is
-   begin
-      if Y < 0 then
-         if X < 0 then
-            pragma Assert (abs (X / Y) = abs (X / (-Y)));
-         else
-            Lemma_Neg_Div (X, Y);
-            pragma Assert (abs (X / Y) = abs ((-X) / (-Y)));
-         end if;
-      end if;
-   end Lemma_Abs_Div_Commutation;
 
    -------------------------------
    -- Lemma_Abs_Rem_Commutation --
@@ -276,16 +255,6 @@ is
       pragma Assert (Uns64 (Xhi) = Xu / Uns64'(2 ** 32));
       pragma Assert (Uns64 (Xlo) = Xu mod 2 ** 32);
    end Lemma_Hi_Lo;
-
-   -------------------
-   -- Lemma_Neg_Div --
-   -------------------
-
-   procedure Lemma_Neg_Div (X, Y : Big_Integer) is
-   begin
-      pragma Assert ((-X) / (-Y) = -(X / (-Y)));
-      pragma Assert (X / (-Y) = -(X / Y));
-   end Lemma_Neg_Div;
 
    -----------------
    -- Raise_Error --
@@ -474,6 +443,7 @@ is
 
       D := Uns64 (Xu) * Uns64 (Yu);
 
+      Lemma_Abs_Mult_Commutation (Big (X), Big (Y));
       pragma Assert (Mult = Big (D));
       Lemma_Hi_Lo (D, Hi (D), Lo (D));
       pragma Assert (Mult = Big_2xx32 * Big (Hi (D)) + Big (Lo (D)));
@@ -508,7 +478,6 @@ is
 
       Lemma_Abs_Div_Commutation (Big (X) * Big (Y), Big (Z));
       Lemma_Abs_Rem_Commutation (Big (X) * Big (Y), Big (Z));
-      Lemma_Abs_Mult_Commutation (Big (X), Big (Y));
       Lemma_Abs_Commutation (X);
       Lemma_Abs_Commutation (Y);
       Lemma_Abs_Commutation (Z);
@@ -541,8 +510,10 @@ is
          end if;
       end if;
 
+      pragma Assert (In_Int32_Range (Big_Q));
       pragma Assert (Big (Qu) = abs Big_Q);
       pragma Assert (Big (Ru) = abs Big_R);
+      Prove_Sign_R;
 
       --  Set final signs (RM 4.5.5(27-30))
 
@@ -563,7 +534,6 @@ is
          Q := (if Z > 0 then To_Neg_Int (Qu) else To_Pos_Int (Qu));
       end if;
 
-      Prove_Sign_R;
       Prove_Signs;
    end Scaled_Divide32;
 

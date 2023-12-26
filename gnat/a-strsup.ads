@@ -6,7 +6,7 @@
 --                                                                          --
 --                                 S p e c                                  --
 --                                                                          --
---          Copyright (C) 2003-2022, Free Software Foundation, Inc.         --
+--          Copyright (C) 2003-2023, Free Software Foundation, Inc.         --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -49,9 +49,11 @@ pragma Assertion_Policy (Pre            => Ignore,
 
 with Ada.Strings.Maps; use type Ada.Strings.Maps.Character_Mapping_Function;
 with Ada.Strings.Search;
+with Ada.Strings.Text_Buffers;
 
 package Ada.Strings.Superbounded with SPARK_Mode is
    pragma Preelaborate;
+   pragma Annotate (GNATprove, Always_Return, Superbounded);
 
    --  Type Bounded_String in Ada.Strings.Bounded.Generic_Bounded_Length is
    --  derived from Super_String, with the constraint of the maximum length.
@@ -69,7 +71,8 @@ package Ada.Strings.Superbounded with SPARK_Mode is
    with
      Predicate =>
        Current_Length <= Max_Length
-         and then Data (1 .. Current_Length)'Initialized;
+         and then Data (1 .. Current_Length)'Initialized,
+     Put_Image => Put_Image;
 
    --  The subprograms defined for Super_String are similar to those
    --  defined for Bounded_String, except that they have different names, so
@@ -1404,6 +1407,9 @@ package Ada.Strings.Superbounded with SPARK_Mode is
             Super_Element (Super_Translate'Result, K) =
               Mapping (Super_Element (Source, K))),
      Global => null;
+   pragma Annotate (GNATprove, False_Positive,
+                    "call via access-to-subprogram",
+                    "function Mapping must always terminate");
 
    procedure Super_Translate
      (Source  : in out Super_String;
@@ -1416,6 +1422,9 @@ package Ada.Strings.Superbounded with SPARK_Mode is
             Super_Element (Source, K) =
               Mapping (Super_Element (Source'Old, K))),
      Global => null;
+   pragma Annotate (GNATprove, False_Positive,
+                    "call via access-to-subprogram",
+                    "function Mapping must always terminate");
 
    ---------------------------------------
    -- String Transformation Subprograms --
@@ -2000,7 +2009,7 @@ package Ada.Strings.Superbounded with SPARK_Mode is
             --  Source are remaining at the left.
 
             and then
-              (if New_Item'Length > Source.Max_Length then
+              (if New_Item'Length >= Source.Max_Length then
 
                  --  New_Item covers all Max_Length characters
 
@@ -2089,7 +2098,7 @@ package Ada.Strings.Superbounded with SPARK_Mode is
             --  Source are remaining at the left.
 
             and then
-              (if New_Item'Length > Source.Max_Length then
+              (if New_Item'Length >= Source.Max_Length then
 
                  --  New_Item covers all Max_Length characters
 
@@ -2694,6 +2703,10 @@ package Ada.Strings.Superbounded with SPARK_Mode is
                      Super_Length (Item)
                        - (Item.Max_Length - K) mod Super_Length (Item)))),
      Global         => null;
+
+   procedure Put_Image
+     (S      : in out Ada.Strings.Text_Buffers.Root_Buffer_Type'Class;
+      Source : Super_String);
 
 private
       --  Pragma Inline declarations

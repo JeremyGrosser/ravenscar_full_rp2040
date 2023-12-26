@@ -11,19 +11,21 @@ abstract project Target_Options is
   Lib : Lib_Type := external ("LIBRARY_TYPE", "static");
 
   --  GNAT version string
-  Version := "12";
+  Version := "13";
 
   --  COMFLAGS here is common flags (used for C and Ada).
-  COMFLAGS := ("-fcallgraph-info=su,da",
-        "-ffunction-sections",
-        "-fdata-sections");
+  COMFLAGS := ("-ffunction-sections",
+        "-fdata-sections",
+        "-fcallgraph-info=su,da");
   COMGNARLFLAGS := ("");
+  COMDEBUGFLAGS := ("-g");
 
   --  Per language flags (COMFLAGS will be added later)
   ADAFLAGS := ("-gnatg", "-nostdinc", "-fno-delete-null-pointer-checks");
   ASMFLAGS := ("");
   CFLAGS := ("-DIN_RTS",
-        "-Dinhibit_libc", "-Werror", "-Wall");
+        "-Dinhibit_libc",
+        "-DLIGHT_RUNTIME", "-Werror", "-Wall");
   case Build is
      when "Production" =>
         --  Optimize
@@ -31,8 +33,8 @@ abstract project Target_Options is
         ADAFLAGS := ADAFLAGS & ("-gnatp", "-gnatn2");
      when "Debug" =>
         --  Disable optimization and add debug symbols
-        COMFLAGS := COMFLAGS & ("-O0", "-g");
-        ASMFLAGS := ASMFLAGS & ("-g");
+        COMFLAGS := COMFLAGS & COMDEBUGFLAGS & ("-O0");
+        ASMFLAGS := ASMFLAGS & COMDEBUGFLAGS;
      when "Assert" =>
         --  Possibly enable assertions. This might use too much memory on
         --  some systems or could be too slow.
@@ -40,11 +42,10 @@ abstract project Target_Options is
         ADAFLAGS := ADAFLAGS & ("-gnata");
      when "Gnatcov" =>
         --  For coverage
-        COMFLAGS := COMFLAGS & ("-O0", "-g", "-fdump-scos",
-                                "-fpreserve-control-flow");
+        COMFLAGS := COMFLAGS & COMDEBUGFLAGS &
+          ("-O0", "-fdump-scos", "-fpreserve-control-flow");
   end case;
   --  Linker flags, used for building shared libraries
-  LFLAGS := ();
   LOPTIONS := ();
   case Lib is
      when "static" =>
@@ -55,9 +56,8 @@ abstract project Target_Options is
         --  link against libgnat (itself).
         --  Since -nostdlib also removes libgcc
         --  from the linked libraries we have to
-        --  add -lm again.
-        LFLAGS := LFLAGS & ("-nostdlib");
-        LOPTIONS := LOPTIONS & ("-lm", "-lgcc");
+        --  add -lgcc again.
+        LOPTIONS := LOPTIONS & ("-nostdlib", "-lgcc");
   end case;
 
   --  Concatenate with common flags

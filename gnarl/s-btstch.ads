@@ -7,7 +7,7 @@
 --                                  S p e c                                 --
 --                                                                          --
 --               Copyright (C) 2004 The European Space Agency               --
---                     Copyright (C) 2004-2022, AdaCore                     --
+--                     Copyright (C) 2004-2023, AdaCore                     --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -40,7 +40,7 @@ pragma Restrictions (No_Elaboration_Code);
 package System.BB.Threads.Stack_Checking is
 
    procedure Stack_Check (Stack_Address : System.Address);
-   pragma Export (C, Stack_Check, "_gnat_stack_check");
+   pragma Export (C, Stack_Check, "__gnat_stack_check");
    --  This version of Stack_Check should not be inlined
 
 end System.BB.Threads.Stack_Checking;

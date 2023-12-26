@@ -4,9 +4,9 @@
 --                                                                          --
 --                S Y S T E M . R E L A T I V E _ D E L A Y S               --
 --                                                                          --
---                                  S p e c                                 --
+--                                  B o d y                                 --
 --                                                                          --
---             Copyright (C) 2016-2022, Free Software Foundation, Inc.      --
+--             Copyright (C) 2016-2023, Free Software Foundation, Inc.      --
 --                                                                          --
 -- GNARL is free software; you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
